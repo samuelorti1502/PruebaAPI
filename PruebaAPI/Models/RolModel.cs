@@ -1,6 +1,6 @@
 ﻿namespace PruebaAPI.Models
 {
-    public class Rol
+    public class RolModel
     {
         public int opcion { get; set; }
         public int? id { get; set; }

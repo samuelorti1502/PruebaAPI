@@ -19,9 +19,9 @@ public class Metodos_Rol
         }
     }
 
-    private async Task<List<Rol>> EjecutarSP(int accion, int? id, string rol, string descripcion, int usuarioCreacion)
+    private async Task<List<RolModel>> EjecutarSP(int accion, int? id, string rol, string descripcion, int usuarioCreacion)
     {
-        var lista = new List<Rol>();
+        var lista = new List<RolModel>();
 
         using (var sql = new SqlConnection(conexion.GetConexion()))
         using (var cmd = new SqlCommand("sp_roles_crud", sql))
@@ -40,7 +40,7 @@ public class Metodos_Rol
             {
                 while (await leer.ReadAsync())
                 {
-                    var M_Rol = new Rol
+                    var M_Rol = new RolModel
                     {
                         opcion = accion,
                         id = (int)leer["id"],
@@ -58,27 +58,27 @@ public class Metodos_Rol
         return lista;
     }
 
-    public async Task<List<Rol>> MostrarRoles()
+    public async Task<List<RolModel>> MostrarRoles()
     {
         return await EjecutarSP(4, 0, "", "", 3);
     }
-    public async Task<List<Rol>> MostrarRol_id(int id)
+    public async Task<List<RolModel>> MostrarRol_id(int id)
     {
         
         return await EjecutarSP(5, id, "", "", 3);
     }
-    public async Task InsertarRol(Rol parametros)
+    public async Task InsertarRol(RolModel parametros)
     {
         await EjecutarSP(1, 0, parametros.rol, parametros.descripcion, parametros.usuario_creacion);
     }
-    public async Task ModificarRol(Rol parametros)
+    public async Task ModificarRol(RolModel parametros)
     {
         await EjecutarSP(2, parametros.id, parametros.rol, parametros.descripcion, parametros.usuario_creacion);
     }
 
-    /*public async Task EliminarRol(Rol parametros)
+    public async Task EliminarRol(RolModel parametros)
     {
         await EjecutarSP(parametros.opcion, parametros.id, parametros.rol, parametros.descripcion, parametros.usuario_creacion);
-    }*/
+    }
 }
 

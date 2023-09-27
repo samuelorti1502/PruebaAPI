@@ -11,12 +11,9 @@ namespace PruebaAPI.Controllers
     [Route("api/rol")]
     public class RolController : Controller
     {
-        private readonly Metodos_Rol _metodosRol;
-
-
         [HttpGet]
         [Route("listar")]
-        public async Task<ActionResult<List<Rol>>> Get()
+        public async Task<ActionResult<List<RolModel>>> Get()
         {
             try
             {
@@ -32,7 +29,7 @@ namespace PruebaAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<Rol>>> MostrarRol_id(int id)
+        public async Task<ActionResult<List<RolModel>>> MostrarRol_id(int id)
         {
             try
             {
@@ -61,18 +58,34 @@ namespace PruebaAPI.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody] Rol parametros)
+        public async Task Post([FromBody] RolModel parametros)
         {
-            var funcion = new Metodos_Rol();
-            await funcion.InsertarRol(parametros);
+            try
+            {
+                var funcion = new Metodos_Rol();
+                await funcion.InsertarRol(parametros);
+            }
+            catch (Exception ex)
+            {
+                StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] Rol parametros)
+        public async Task<ActionResult> Put(int id, [FromBody] RolModel parametros)
         {
             var funcion = new Metodos_Rol();
             parametros.id = id;
             await funcion.ModificarRol(parametros);
+            return new OkResult();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id, [FromBody] RolModel parametros)
+        {
+            var funcion = new Metodos_Rol();
+            parametros.id = id;
+            await funcion.EliminarRol(parametros);
             return new OkResult();
         }
     }
