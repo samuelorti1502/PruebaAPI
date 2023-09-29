@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace PruebaAPI.Metodos
 {
-    public class Permisos
+    public class Metodo_Permisos
     {
         private ConexionDB conexion = new ConexionDB();
 
@@ -20,7 +20,7 @@ namespace PruebaAPI.Metodos
             }
         }
 
-        private async Task<List<PermisosModel>> EjecutarSP(int accion, int? id, int id_usuario, int id_modulo, int id_estatus, int usuario_creacion)
+        private async Task<List<PermisosModel>> EjecutarSP(int accion, int? id, int? id_usuario, int? id_modulo, int? id_estatus, int? usuario_creacion)
         {
             var lista = new List<PermisosModel>();
 
@@ -29,7 +29,7 @@ namespace PruebaAPI.Metodos
             {
                 cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
-                AgregarParametro(cmd, "@accion", accion);
+                AgregarParametro(cmd, "@operacion", accion);
                 AgregarParametro(cmd, "@id", id);
                 AgregarParametro(cmd, "@id_usuario", id_usuario);
                 AgregarParametro(cmd, "@id_modulo", id_modulo);
@@ -42,7 +42,7 @@ namespace PruebaAPI.Metodos
                 {
                     while (await leer.ReadAsync())
                     {
-                        var M_Permisos= new PermisosModel
+                        var M_Permisos = new PermisosModel
                         {
                             id = (int)leer["id"],
                             id_usuario = (int)leer["id_usuario"],
@@ -59,30 +59,26 @@ namespace PruebaAPI.Metodos
             return lista;
         }
 
-        /*public async Task<List<PermisosModel>> MostrarPermisos()
+        public async Task<List<PermisosModel>> MostrarPermisos()
         {
-            return await EjecutarSP(4, 0, "", "", "", "", 0, 0, 0, "");
+            return await EjecutarSP(4, 0, 0, 0, 0, 0);
         }
         public async Task<List<PermisosModel>> MostrarPermisos_id(int id)
         {
-            return await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
+            return await EjecutarSP(5, id, 0, 0, 0, 0);
         }
         public async Task InsertarPermisos(PermisosModel parametros)
         {
-            string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
-
-            await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.email, parametros.Permisos, parametros.id_rol, parametros.id_estatus, parametros.Permisos_creacion, hashPassword);
+            await EjecutarSP(1, 0, parametros.id_usuario, parametros.id_modulo, parametros.id_estatus, parametros.usuario_creacion);
         }
         public async Task ModificarPermisos(PermisosModel parametros)
         {
-            string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
-
-            await EjecutarSP(2, parametros.id, parametros.nombres, parametros.apellidos, parametros.email, parametros.Permisos, parametros.id_rol, parametros.id_estatus, parametros.Permisos_creacion, hashPassword);
+            await EjecutarSP(2, 0, parametros.id_usuario, parametros.id_modulo, parametros.id_estatus, parametros.usuario_creacion);
         }
 
         public async Task EliminarPermisos(PermisosModel parametros)
         {
-            await EjecutarSP(3, parametros.id, "", "", "", "", 0, 0, 0, "");
-        }*/
+            await EjecutarSP(3, parametros.id, 0, 0, 0, 0);
+        }
     }
 }
