@@ -31,8 +31,8 @@ namespace PruebaAPI.Metodos
                 AgregarParametro(cmd, "@operacion", accion);
                 AgregarParametro(cmd, "@id", id);
                 AgregarParametro(cmd, "@id_mesa", id_mesa);
-                AgregarParametro(cmd, "@fecha_pedido", fecha_pedido);
-                AgregarParametro(cmd, "@usuario_creacion", usuario_creacion);
+                AgregarParametro(cmd, "@fecha", fecha_pedido);
+                AgregarParametro(cmd, "@usuario", usuario_creacion);
                 AgregarParametro(cmd, "@estatus", estatus);
 
                 await sql.OpenAsync();
@@ -44,9 +44,9 @@ namespace PruebaAPI.Metodos
                         var M_Pedidos = new PedidosModel
                         {
                             id_mesa = (int)leer["id_mesa"],
-                            fecha_pedido = (String)leer["fecha_pedido"],
+                            fecha_pedido = (String)leer["fecha"],
                             estatus = (int)leer["estatus"],
-                            usuario_creacion = (int)leer["usuario_creacion"]
+                            usuario_creacion = (int)leer["usuario"]
                         };
 
                         lista.Add(M_Pedidos);

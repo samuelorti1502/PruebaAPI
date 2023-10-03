@@ -64,8 +64,6 @@ namespace PruebaAPI.Controllers
                     BadRequest("No se proporcionaron todos los parametros para el tipo de persona.");
                 }
 
-
-
                 var datos = new Metodo_Pedidos();
                 await datos.InsertarPedidos(parametros);
             }
