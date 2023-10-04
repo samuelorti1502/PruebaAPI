@@ -16,6 +16,7 @@ namespace PruebaAPI.Controllers
             {
                 var datos = new Metodo_Usuario();
                 var lista = await datos.MostrarUsuario();
+                
                 return Ok(lista);
             }
             catch (Exception ex)
@@ -54,7 +55,7 @@ namespace PruebaAPI.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody] UsuarioModel parametros)
+        /*public async Task Post([FromBody] UsuarioModel parametros)
         {
             try
             {
@@ -65,7 +66,29 @@ namespace PruebaAPI.Controllers
             {
                 StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
+        }*/
+
+        public async Task<IActionResult> Post([FromBody] UsuarioModel parametros)
+        {
+            try
+            {
+                var funcion = new Metodo_Usuario();
+                await funcion.InsertarUsuario(parametros);
+
+                // Agregar un mensaje de éxito a la respuesta
+                var mensaje = "El usuario ha sido creado con éxito, revisa tu correo para confirmar tu cuenta."; // Puedes personalizar el mensaje según tus necesidades.
+
+                // Devolver una respuesta con el código 201 Created y el mensaje de éxito
+                return CreatedAtAction(nameof(Get), new { id = parametros.id }, new { Mensaje = mensaje });
+                //return Ok(mensaje);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
         }
+
+
 
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] UsuarioModel parametros)
