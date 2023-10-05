@@ -116,6 +116,15 @@ namespace PruebaAPI.Controllers
         }
 
 
+        [HttpPost("validar2")]
+        public async Task<IActionResult> ValidarUsuario2(string user, String pass)
+        {
+            var datos = new Metodo_Usuario();
+            var roles = await datos.Validar(user, pass);
+
+            return Ok(roles);
+        }
+
         [HttpPut("{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] UsuarioModel parametros)
         {

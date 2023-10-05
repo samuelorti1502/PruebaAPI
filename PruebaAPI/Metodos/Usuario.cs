@@ -24,7 +24,7 @@ public class Metodo_Usuario
         var lista = new List<UsuarioModel>();
 
         using (var sql = new SqlConnection(conexion.GetConexion()))
-        using (var cmd = new SqlCommand("sp_usuario_crud", sql))
+        using (var cmd = new SqlCommand("sp_creacion_usuario", sql))
         {
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -107,32 +107,46 @@ public class Metodo_Usuario
         return false;
     }
 
-    public async Task<string?> Validar(int? id, string? contraseñaUsuario)
-{
-    var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
-
-    // Verificar si la lista de usuarios está vacía o si no se encontró el usuario
-    if (usuarios.Count == 0)
+    public class ValidacionResultado
     {
-        return "Usuario no encontrado";
+        public string Mensaje { get; set; }
+        public string Usuario { get; set; }
     }
 
-    // Tomar el primer usuario de la lista (asumiendo que es el único)
-    var usuario = usuarios[0];
-
-    // Verificar la contraseña
-    bool contraseñaValida = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
-
-    if (contraseñaValida)
+    public async Task<ValidacionResultado> Validar(string? usr, string contraseñaUsuario)
     {
-        // Si la contraseña es válida, retornar la contraseña
-        return usuario.password;
+        var resultado = new ValidacionResultado();
+
+        var usuarios = await EjecutarSP(6, 0, "", "", "", usr, 0, 0, 0, "");
+
+        // Verificar si la lista de usuarios está vacía o si no se encontró el usuario
+        if (usuarios.Count == 0)
+        {
+            resultado.Mensaje = "Usuario no encontrado";
+        }
+        else
+        {
+            // Tomar el primer usuario de la lista (asumiendo que es el único)
+            var usuario = usuarios[0];
+
+            // Verificar la contraseña
+            bool contraseñaValida = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
+
+            if (contraseñaValida)
+            {
+                // Si la contraseña es válida, establecer el mensaje y el nombre de usuario
+                resultado.Mensaje = "Contraseña válida";
+                resultado.Usuario = usuario.usuario;
+            }
+            else
+            {
+                resultado.Mensaje = "Contraseña no válida";
+            }
+        }
+
+        return resultado;
     }
-    else
-    {
-        return "Contraseña no válida";
-    }
-}
+
 
 
 }
