@@ -91,4 +91,48 @@ public class Metodo_Usuario
     {
         await EjecutarSP(3, parametros.id, "", "", "", "", 0, 0, 0, "");
     }
+    public async Task<bool> ValidarUsuario(int? id, string? contraseñaUsuario)
+    {
+        var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
+
+        if (usuarios.Count == 1)
+        {
+            var usuario = usuarios[0];
+
+            bool contraseñasCoinciden = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
+
+            return contraseñasCoinciden;
+        }
+
+        return false;
+    }
+
+    public async Task<string?> Validar(int? id, string? contraseñaUsuario)
+{
+    var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
+
+    // Verificar si la lista de usuarios está vacía o si no se encontró el usuario
+    if (usuarios.Count == 0)
+    {
+        return "Usuario no encontrado";
+    }
+
+    // Tomar el primer usuario de la lista (asumiendo que es el único)
+    var usuario = usuarios[0];
+
+    // Verificar la contraseña
+    bool contraseñaValida = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
+
+    if (contraseñaValida)
+    {
+        // Si la contraseña es válida, retornar la contraseña
+        return usuario.password;
+    }
+    else
+    {
+        return "Contraseña no válida";
+    }
+}
+
+
 }

@@ -88,6 +88,32 @@ namespace PruebaAPI.Controllers
             }
         }
 
+        [HttpPost("validar")]
+        public async Task<IActionResult> ValidarUsuario([FromBody] UsuarioModel parametros)
+        {
+            //return Ok(parametros.password);
+            // Validar que se proporcionó el ID de usuario y la contraseña
+            if (string.IsNullOrEmpty(parametros.usuario) || string.IsNullOrEmpty(parametros.password))
+            {
+                return BadRequest("ID de usuario y contraseña son requeridos.");
+            }
+            var funcion = new Metodo_Usuario();
+            // Llamar a la función ValidarUsuario para verificar la contraseña
+            bool contraseñaValida = await funcion.ValidarUsuario(parametros.id, parametros.password);
+            //var contraseña = await funcion.Validar(parametros.id, parametros.password);
+
+            // Verificar si la contraseña es válida
+            if (contraseñaValida)
+            {
+                return Ok("Contraseña válida.");
+            }
+            else
+            {
+                return Unauthorized("La contraseña no es válida.");
+            }
+
+            //return Ok(contraseña);
+        }
 
 
         [HttpPut("{id}")]
