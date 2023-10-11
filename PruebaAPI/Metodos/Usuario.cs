@@ -2,10 +2,25 @@
 using BCrypt.Net;
 using RestauranteAPI.Models;
 using RestauranteAPI.Conn;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 public class Metodo_Usuario
 {
     private ConexionDB conexion = new ConexionDB();
+
+    public IConfiguration _configuration;
+
+    public Metodo_Usuario(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+
+    public Metodo_Usuario()
+    {
+
+    }
 
     private void AgregarParametro(SqlCommand cmd, string nombre, object valor)
     {
@@ -19,7 +34,7 @@ public class Metodo_Usuario
         }
     }
 
-    private async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, int? id_rol, int? id_estatus, int? usuarioCreacion, string? password)
+    private async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, int? id_rol, int? id_estatus, string? usuarioCreacion, string? password)
     {
         var lista = new List<UsuarioModel>();
 
@@ -54,7 +69,7 @@ public class Metodo_Usuario
                         usuario = (string)leer["usuario"],
                         id_rol = (int)leer["id_rol"],
                         id_estatus = (int)leer["id_estatus"],
-                        usuario_creacion = (int)leer["usuario_creacion"],
+                        usuario_creacion = (string)leer["usuario_creacion"],
                         password = (string)leer["password"]
                     };
 
@@ -68,11 +83,11 @@ public class Metodo_Usuario
 
     public async Task<List<UsuarioModel>> MostrarUsuario()
     {
-        return await EjecutarSP(4, 0, "", "", "", "", 0, 0, 0, "");
+        return await EjecutarSP(4, null, null, null, null, null, null, null, null, null);
     }
     public async Task<List<UsuarioModel>> MostrarUsuario_id(int id)
     {
-        return await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
+        return await EjecutarSP(5, id, "", "", "", "", 0, 0, null, "");
     }
     public async Task InsertarUsuario(UsuarioModel parametros)
     {
@@ -86,14 +101,13 @@ public class Metodo_Usuario
 
         await EjecutarSP(2, parametros.id, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.id_rol, parametros.id_estatus, parametros.usuario_creacion, hashPassword);
     }
-
     public async Task EliminarUsuario(UsuarioModel parametros)
     {
-        await EjecutarSP(3, parametros.id, "", "", "", "", 0, 0, 0, "");
+        await EjecutarSP(3, parametros.id, "", "", "", "", 0, 0, null, "");
     }
     public async Task<bool> ValidarUsuario(int? id, string? contraseñaUsuario)
     {
-        var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, "");
+        var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, null, "");
 
         if (usuarios.Count == 1)
         {
@@ -109,32 +123,35 @@ public class Metodo_Usuario
 
     public class ValidacionResultado
     {
+        public bool success { get; set; }
         public string Mensaje { get; set; }
         public string Usuario { get; set; }
     }
-
     public async Task<ValidacionResultado> Validar(string? usr, string contraseñaUsuario)
     {
         var resultado = new ValidacionResultado();
 
-        var usuarios = await EjecutarSP(6, 0, "", "", "", usr, 0, 0, 0, "");
+        var usuarios = await EjecutarSP(6, 0, "", "", "", usr, 0, 0, null, "");
+
+        // Tomar el primer usuario de la lista (asumiendo que es el único)
+        var usuario = usuarios[0];
 
         // Verificar si la lista de usuarios está vacía o si no se encontró el usuario
         if (usuarios.Count == 0)
         {
+            resultado.success = false;
             resultado.Mensaje = "Usuario no encontrado";
+            resultado.Usuario = "";
         }
         else
         {
-            // Tomar el primer usuario de la lista (asumiendo que es el único)
-            var usuario = usuarios[0];
-
             // Verificar la contraseña
             bool contraseñaValida = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
 
             if (contraseñaValida)
             {
                 // Si la contraseña es válida, establecer el mensaje y el nombre de usuario
+                resultado.success = true;
                 resultado.Mensaje = "Contraseña válida";
                 resultado.Usuario = usuario.usuario;
             }
@@ -144,9 +161,19 @@ public class Metodo_Usuario
             }
         }
 
+        var jwt = _configuration.GetSection("Jwt").Get<JwtModel>();
+
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, jwt.Subject),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+            //new Claim("id", usuario.id),
+            new Claim("usuario", usuario.usuario)
+        };
+
         return resultado;
     }
-
 
 
 }

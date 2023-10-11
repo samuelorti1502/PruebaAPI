@@ -10,7 +10,7 @@
         public string? usuario { get; set; }
         public int? id_rol { get; set; }
         public int? id_estatus { get; set; }
-        public int? usuario_creacion { get; set; }
+        public string? usuario_creacion { get; set; }
         public string? password { get; set; }
     }
 }
