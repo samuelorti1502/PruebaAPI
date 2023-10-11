@@ -55,19 +55,6 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpPost]
-        /*public async Task Post([FromBody] UsuarioModel parametros)
-        {
-            try
-            {
-                var funcion = new Metodo_Usuario();
-                await funcion.InsertarUsuario(parametros);
-            }
-            catch (Exception ex)
-            {
-                StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
-            }
-        }*/
-
         public async Task<IActionResult> Post([FromBody] UsuarioModel parametros)
         {
             try
@@ -88,59 +75,22 @@ namespace RestauranteAPI.Controllers
             }
         }
 
-        [HttpPost("validar")]
-        public async Task<IActionResult> ValidarUsuario([FromBody] UsuarioModel parametros)
+        [HttpPut("{user}")]
+        public async Task<ActionResult> Put([FromBody] UsuarioModel parametros)
         {
-            //return Ok(parametros.password);
-            // Validar que se proporcionó el ID de usuario y la contraseña
-            if (string.IsNullOrEmpty(parametros.usuario) || string.IsNullOrEmpty(parametros.password))
+            try
             {
-                return BadRequest("ID de usuario y contraseña son requeridos.");
+                var funcion = new Metodo_Usuario();
+                //parametros.usuario = user;
+                await funcion.ModificarUsuario(parametros);
+                return new OkResult();
             }
-            var funcion = new Metodo_Usuario();
-            // Llamar a la función ValidarUsuario para verificar la contraseña
-            bool contraseñaValida = await funcion.ValidarUsuario(parametros.id, parametros.password);
-            //var contraseña = await funcion.Validar(parametros.id, parametros.password);
-
-            // Verificar si la contraseña es válida
-            if (contraseñaValida)
+            catch (Exception ex)
             {
-                return Ok("Contraseña válida.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
-            else
-            {
-                return Unauthorized("La contraseña no es válida.");
-            }
-
-            //return Ok(contraseña);
         }
 
 
-        [HttpPost("validar2")]
-        public async Task<IActionResult> ValidarUsuario2(string user, string pass)
-        {
-            var datos = new Metodo_Usuario();
-            var roles = await datos.Validar(user, pass);
-
-            return Ok(roles);
-        }
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult> Put(int id, [FromBody] UsuarioModel parametros)
-        {
-            var funcion = new Metodo_Usuario();
-            parametros.id = id;
-            await funcion.ModificarUsuario(parametros);
-            return new OkResult();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id, [FromBody] UsuarioModel parametros)
-        {
-            var funcion = new Metodo_Usuario();
-            parametros.id = id;
-            await funcion.EliminarUsuario(parametros);
-            return new OkResult();
-        }
     }
 }

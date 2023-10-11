@@ -34,12 +34,13 @@ public class Metodo_Usuario
         }
     }
 
-    private async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, int? id_rol, int? id_estatus, string? usuarioCreacion, string? password)
+    private async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, string? rol,
+        string? estatus, string? usuarioCreacion, string? password)
     {
         var lista = new List<UsuarioModel>();
 
         using (var sql = new SqlConnection(conexion.GetConexion()))
-        using (var cmd = new SqlCommand("sp_creacion_usuario", sql))
+        using (var cmd = new SqlCommand("sp_usuario_crud", sql))
         {
             cmd.CommandType = System.Data.CommandType.StoredProcedure;
 
@@ -49,8 +50,8 @@ public class Metodo_Usuario
             AgregarParametro(cmd, "@apellidos", apellidos);
             AgregarParametro(cmd, "@email", email);
             AgregarParametro(cmd, "@usuario", usuario);
-            AgregarParametro(cmd, "@id_rol", id_rol);
-            AgregarParametro(cmd, "@id_estatus", id_estatus);
+            AgregarParametro(cmd, "@rol", rol);
+            AgregarParametro(cmd, "@estatus", estatus);
             AgregarParametro(cmd, "@usuario_creacion", usuarioCreacion);
             AgregarParametro(cmd, "@password", password);
 
@@ -67,8 +68,8 @@ public class Metodo_Usuario
                         apellidos = (string)leer["apellidos"],
                         email = (string)leer["email"],
                         usuario = (string)leer["usuario"],
-                        id_rol = (int)leer["id_rol"],
-                        id_estatus = (int)leer["id_estatus"],
+                        rol = (string)leer["rol"],
+                        estatus = (string)leer["estatus"],
                         usuario_creacion = (string)leer["usuario_creacion"],
                         password = (string)leer["password"]
                     };
@@ -87,27 +88,28 @@ public class Metodo_Usuario
     }
     public async Task<List<UsuarioModel>> MostrarUsuario_id(int id)
     {
-        return await EjecutarSP(5, id, "", "", "", "", 0, 0, null, "");
+        return await EjecutarSP(5, id, null, null, null, null, null, null, null, null);
     }
     public async Task InsertarUsuario(UsuarioModel parametros)
     {
         string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
 
-        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.id_rol, parametros.id_estatus, parametros.usuario_creacion, hashPassword);
+        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, null, 
+            parametros.usuario_creacion, hashPassword);
     }
     public async Task ModificarUsuario(UsuarioModel parametros)
     {
         string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
 
-        await EjecutarSP(2, parametros.id, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.id_rol, parametros.id_estatus, parametros.usuario_creacion, hashPassword);
+        await EjecutarSP(2, parametros.id, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, parametros.estatus, parametros.usuario_creacion, hashPassword);
     }
     public async Task EliminarUsuario(UsuarioModel parametros)
     {
-        await EjecutarSP(3, parametros.id, "", "", "", "", 0, 0, null, "");
+        await EjecutarSP(3, parametros.id, null, null, null, null, null, null, null, null);
     }
     public async Task<bool> ValidarUsuario(int? id, string? contraseñaUsuario)
     {
-        var usuarios = await EjecutarSP(5, id, "", "", "", "", 0, 0, null, "");
+        var usuarios = await EjecutarSP(5, id, null, null, null, null, null, null, null, null);
 
         if (usuarios.Count == 1)
         {
@@ -131,7 +133,9 @@ public class Metodo_Usuario
     {
         var resultado = new ValidacionResultado();
 
-        var usuarios = await EjecutarSP(6, 0, "", "", "", usr, 0, 0, null, "");
+        //resultado.Usuario = usr;
+
+        var usuarios = await EjecutarSP(6, null, null, null, null, usr, null, null, null, null);
 
         // Tomar el primer usuario de la lista (asumiendo que es el único)
         var usuario = usuarios[0];
@@ -174,6 +178,4 @@ public class Metodo_Usuario
 
         return resultado;
     }
-
-
 }
