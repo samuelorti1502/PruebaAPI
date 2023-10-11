@@ -1,4 +1,4 @@
-﻿namespace PruebaAPI.Metodos
+﻿namespace RestauranteAPI.Models
 {
     public class CuponModel
     {

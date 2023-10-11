@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PruebaAPI.Metodos;
-using PruebaAPI.Models;
+using RestauranteAPI.Metodos;
+using RestauranteAPI.Models;
 
-namespace PruebaAPI.Controllers
+namespace RestauranteAPI.Controllers
 {
     [Route("api/Categorias")]
     [ApiController]

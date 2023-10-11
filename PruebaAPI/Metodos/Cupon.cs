@@ -1,8 +1,9 @@
-﻿using PruebaAPI.Conexion;
-using PruebaAPI.Models;
+﻿using RestauranteAPI.Models;
+using RestauranteAPI.Conn;
+using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
-namespace PruebaAPI.Metodos
+namespace RestauranteAPI.Metodos
 {
     public class Metodo_Cupon
     {

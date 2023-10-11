@@ -2,10 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Reflection.Metadata.Ecma335;
+using RestauranteAPI.Models;
 
-using PruebaAPI.Models;
-
-namespace PruebaAPI.Controllers
+namespace RestauranteAPI.Controllers
 {
     [ApiController]
     [Route("api/rol")]
@@ -25,7 +24,7 @@ namespace PruebaAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
-            
+
         }
 
         [HttpGet("{id}")]
@@ -54,7 +53,7 @@ namespace PruebaAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
-            
+
         }
 
         [HttpPost]

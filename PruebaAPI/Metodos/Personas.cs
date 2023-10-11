@@ -1,7 +1,7 @@
-﻿using PruebaAPI.Conexion;
-using PruebaAPI.Models;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using BCrypt.Net;
+using RestauranteAPI.Models;
+using RestauranteAPI.Conn;
 
 public class Metodo_Personas
 {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PruebaAPI.Models;
+using RestauranteAPI.Models;
 
-namespace PruebaAPI.Controllers
+namespace RestauranteAPI.Controllers
 {
     [Route("api/usuario")]
     [ApiController]
@@ -16,7 +16,7 @@ namespace PruebaAPI.Controllers
             {
                 var datos = new Metodo_Usuario();
                 var lista = await datos.MostrarUsuario();
-                
+
                 return Ok(lista);
             }
             catch (Exception ex)
@@ -79,7 +79,7 @@ namespace PruebaAPI.Controllers
                 var mensaje = "El usuario ha sido creado con éxito, revisa tu correo para confirmar tu cuenta."; // Puedes personalizar el mensaje según tus necesidades.
 
                 // Devolver una respuesta con el código 201 Created y el mensaje de éxito
-                return CreatedAtAction(nameof(Get), new { id = parametros.id }, new { Mensaje = mensaje });
+                return CreatedAtAction(nameof(Get), new { parametros.id }, new { Mensaje = mensaje });
                 //return Ok(mensaje);
             }
             catch (Exception ex)
@@ -117,7 +117,7 @@ namespace PruebaAPI.Controllers
 
 
         [HttpPost("validar2")]
-        public async Task<IActionResult> ValidarUsuario2(string user, String pass)
+        public async Task<IActionResult> ValidarUsuario2(string user, string pass)
         {
             var datos = new Metodo_Usuario();
             var roles = await datos.Validar(user, pass);

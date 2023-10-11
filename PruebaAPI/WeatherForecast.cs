@@ -1,4 +1,4 @@
-namespace PruebaAPI
+namespace RestauranteAPI
 {
     public class WeatherForecast
     {

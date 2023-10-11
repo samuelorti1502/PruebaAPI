@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PruebaAPI.Conexion;
-using PruebaAPI.Models;
+using RestauranteAPI.Conn;
+using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
 public class Metodos_Facturas

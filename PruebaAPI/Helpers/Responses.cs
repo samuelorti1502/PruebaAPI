@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace PruebaAPI.Helpers
+namespace RestauranteAPI.Helpers
 {
     public class Responses
     {

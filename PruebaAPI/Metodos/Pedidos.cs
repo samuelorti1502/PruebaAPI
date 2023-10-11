@@ -1,8 +1,8 @@
-﻿using PruebaAPI.Conexion;
-using PruebaAPI.Models;
+﻿using RestauranteAPI.Conn;
+using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
-namespace PruebaAPI.Metodos
+namespace RestauranteAPI.Metodos
 {
     public class Metodo_Pedidos
     {
@@ -44,7 +44,7 @@ namespace PruebaAPI.Metodos
                         var M_Pedidos = new PedidosModel
                         {
                             id_mesa = (int)leer["id_mesa"],
-                            fecha_pedido = (String)leer["fecha"],
+                            fecha_pedido = (string)leer["fecha"],
                             estatus = (int)leer["estatus"],
                             usuario_creacion = (int)leer["usuario"]
                         };

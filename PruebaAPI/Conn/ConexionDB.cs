@@ -1,8 +1,8 @@
-﻿namespace PruebaAPI.Conexion
+﻿namespace RestauranteAPI.Conn
 {
     public class ConexionDB
     {
-        private String CadenaConexion = string.Empty;
+        private string CadenaConexion = string.Empty;
 
         public ConexionDB()
         {

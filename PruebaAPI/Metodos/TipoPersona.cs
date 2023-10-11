@@ -1,8 +1,8 @@
-﻿using PruebaAPI.Conexion;
-using PruebaAPI.Models;
+﻿using RestauranteAPI.Conn;
+using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
-namespace PruebaAPI.Metodos
+namespace RestauranteAPI.Metodos
 {
     public class MetodosTipoPersona
     {
@@ -44,7 +44,7 @@ namespace PruebaAPI.Metodos
                         {
                             opcion = accion,
                             id_tipo_persona = (int)leer["id_tipo_persona"],
-                            tipo_persona = (String)leer["tipo_persona"],
+                            tipo_persona = (string)leer["tipo_persona"],
                             id_estatus = (int)leer["id_estatus"],
                             usuario_creacion = (string)leer["usuario_creacion"]
                         };

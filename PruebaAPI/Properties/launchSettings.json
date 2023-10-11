@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "PruebaAPI": {
+    "RestauranteAPI": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

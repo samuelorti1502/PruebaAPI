@@ -1,4 +1,4 @@
-﻿namespace PruebaAPI.Models
+﻿namespace RestauranteAPI.Models
 {
     public class MesasModel
     {

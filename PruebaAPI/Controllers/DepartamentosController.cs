@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PruebaAPI.Metodos;
-using PruebaAPI.Models;
+using RestauranteAPI.Metodos;
+using RestauranteAPI.Models;
 
-namespace PruebaAPI.Controllers
+namespace RestauranteAPI.Controllers
 {
     [ApiController]
     [Route("api/departamento")]
@@ -30,7 +30,7 @@ namespace PruebaAPI.Controllers
         {
             try
             {
-                if ((id <= 0))
+                if (id <= 0)
                 {
                     return BadRequest("El ID de departamento debe ser un número entero positivo.");
                 }
