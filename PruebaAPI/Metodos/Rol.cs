@@ -19,7 +19,7 @@ public class Metodos_Rol
         }
     }
 
-    private async Task<List<RolModel>> EjecutarSP(int accion, int? id, string rol, string descripcion, int usuarioCreacion)
+    private async Task<List<RolModel>> EjecutarSP(int accion, int? id, string rol, string descripcion, int? usuarioCreacion)
     {
         var lista = new List<RolModel>();
 
@@ -42,7 +42,6 @@ public class Metodos_Rol
                 {
                     var M_Rol = new RolModel
                     {
-                        opcion = accion,
                         id = (int)leer["id"],
                         rol = (string)leer["rol"],
                         descripcion = (string)leer["descripcion"],
@@ -60,12 +59,12 @@ public class Metodos_Rol
 
     public async Task<List<RolModel>> MostrarRoles()
     {
-        return await EjecutarSP(4, 0, "", "", 3);
+        return await EjecutarSP(4, null, null, null, null);
     }
     public async Task<List<RolModel>> MostrarRol_id(int id)
     {
         
-        return await EjecutarSP(5, id, "", "", 3);
+        return await EjecutarSP(5, id, null, null, null);
     }
     public async Task InsertarRol(RolModel parametros)
     {
@@ -78,7 +77,7 @@ public class Metodos_Rol
 
     public async Task EliminarRol(RolModel parametros)
     {
-        await EjecutarSP(parametros.opcion, parametros.id, parametros.rol, parametros.descripcion, parametros.usuario_creacion);
+        await EjecutarSP(3, parametros.id, null, null, null);
     }
 }
 

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestauranteAPI.Models;
+using System.Security.Claims;
 
 namespace RestauranteAPI.Controllers
 {
@@ -10,6 +12,8 @@ namespace RestauranteAPI.Controllers
     {
         [HttpGet]
         [Route("listar")]
+        [Authorize(Roles = ("Administrador"))]
+        //[Authorize]
         public async Task<ActionResult<List<UsuarioModel>>> Get()
         {
             try
@@ -91,6 +95,16 @@ namespace RestauranteAPI.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id, [FromBody] UsuarioModel parametros)
+        {
+            var funcion = new Metodo_Usuario();
 
+
+
+            parametros.id = id;
+            await funcion.EliminarUsuario(parametros);
+            return new OkResult();
+        }
     }
 }

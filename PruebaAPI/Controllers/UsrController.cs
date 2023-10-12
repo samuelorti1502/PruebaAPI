@@ -17,6 +17,8 @@ namespace RestauranteAPI.Controllers
             _config = config;
         }
 
+
+
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<List<UsrModel>>> LoginUsr([FromBody] UsrModel parametros)

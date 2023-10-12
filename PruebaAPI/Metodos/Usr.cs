@@ -62,8 +62,8 @@ namespace RestauranteAPI.Metodos
                         {
                             id = (int)leer["id"],
                             usuario = (string)leer["usuario"],
-                            password = (string)leer["password"]
-                            //email = (string)leer["email"]
+                            password = (string)leer["password"],
+                            rol = (string)leer["rol"]
                         };
 
                         lista.Add(M_Usuario);
@@ -85,7 +85,7 @@ namespace RestauranteAPI.Metodos
             public string? Mensaje { get; set; }
             public int? id { get; set; }
             public string? Usuario { get; set; }
-            //public string? email { get; set; }
+            public string? rol { get; set; }
             public string? _token { get; set; }
         }
         public async Task<ValidacionResultado> MostrarUsuario_usr([FromBody] UsrModel parametros)
@@ -102,7 +102,7 @@ namespace RestauranteAPI.Metodos
                 resultado.success = false;
                 resultado.Mensaje = "Usuario no encontrado";
                 resultado.Usuario = null;
-                //resultado.email = null;
+                resultado.rol = null;
                 resultado.id = null;
             }
             else
@@ -119,6 +119,7 @@ namespace RestauranteAPI.Metodos
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
                         new Claim("id", _usuario.id.ToString()),
                         new Claim("usuario", _usuario.usuario),
+                        new Claim(ClaimTypes.Role, _usuario.rol)
                     };
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
@@ -136,7 +137,7 @@ namespace RestauranteAPI.Metodos
                     resultado.Mensaje = "Ingreso exitoso";
                     resultado.id = _usuario.id;
                     resultado.Usuario = _usuario.usuario;
-                    //resultado.email= _usuario.email;
+                    resultado.rol = _usuario.rol;
                     resultado._token = new JwtSecurityTokenHandler().WriteToken(token);
                 }
                 else
@@ -144,7 +145,7 @@ namespace RestauranteAPI.Metodos
                     resultado.success = false;
                     resultado.Mensaje = "Contraseña no válida";
                     resultado.Usuario = null;
-                    //resultado.email = null;
+                    resultado.rol = null;
                     resultado.id = null;
                 }
             }
