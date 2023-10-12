@@ -10,7 +10,7 @@ namespace RestauranteAPI.Controllers
     {
         
 
-        public IConfiguration _config;
+        private readonly IConfiguration _config;
 
         public UsrController(IConfiguration config)
         {
@@ -35,6 +35,24 @@ namespace RestauranteAPI.Controllers
             }
 
         }
+
+        [HttpPost]
+        [Route("login2")]
+        public IActionResult Login(UsrModel parametros)
+        {
+            var datos = new Metodo_Usr(_config);
+            var user = datos.Authenticate(parametros);
+
+            if(user != null)
+            {
+                //Crear token
+                return Ok("Usuario logueado");
+            }
+
+            return NotFound("Usuario no encontrado");
+        }
+
+        
 
     }
 }

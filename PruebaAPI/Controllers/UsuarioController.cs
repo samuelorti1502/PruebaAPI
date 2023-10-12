@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestauranteAPI.Models;
+using System.Security.Claims;
 
 namespace RestauranteAPI.Controllers
 {
@@ -90,7 +91,28 @@ namespace RestauranteAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
         }
+        [HttpDelete("{id}")]
+        //[Route("listar")]
+        public async Task<ActionResult> Delete(int id, [FromBody] UsuarioModel parametros)
+        {
+            var funcion = new Metodo_Usuario();
 
+            //var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userIdClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
+            if (userIdClaim != null)
+            {
+                string userId = userIdClaim.Value;
+                return Ok($"ID de usuario: {userId}");
+            }
+            else
+            {
+                return BadRequest("Usuario no autenticado o no se encontró el ID.");
+            }
+
+            /*parametros.id = id;
+            await funcion.EliminarUsuario(parametros);
+            return new OkResult();*/
+        }
     }
 }

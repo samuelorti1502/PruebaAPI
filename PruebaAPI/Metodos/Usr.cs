@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.VisualBasic;
 using RestauranteAPI.Conn;
 using RestauranteAPI.Models;
 using System.Data.SqlClient;
@@ -62,8 +61,8 @@ namespace RestauranteAPI.Metodos
                         {
                             id = (int)leer["id"],
                             usuario = (string)leer["usuario"],
-                            password = (string)leer["password"]
-                            //email = (string)leer["email"]
+                            password = (string)leer["password"],
+                            rol = (string)leer["rol"]
                         };
 
                         lista.Add(M_Usuario);
@@ -85,7 +84,7 @@ namespace RestauranteAPI.Metodos
             public string? Mensaje { get; set; }
             public int? id { get; set; }
             public string? Usuario { get; set; }
-            //public string? email { get; set; }
+            public string? rol { get; set; }
             public string? _token { get; set; }
         }
         public async Task<ValidacionResultado> MostrarUsuario_usr([FromBody] UsrModel parametros)
@@ -117,8 +116,9 @@ namespace RestauranteAPI.Metodos
                         new Claim(JwtRegisteredClaimNames.Sub, jwt.Subject),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                         new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-                        new Claim("id", _usuario.id.ToString()),
-                        new Claim("usuario", _usuario.usuario),
+                        new Claim(ClaimTypes.NameIdentifier, _usuario.id.ToString()),
+                        new Claim(ClaimTypes.Name, _usuario.usuario),
+                        new Claim(ClaimTypes.Role, _usuario.rol),
                     };
 
                     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
@@ -133,10 +133,10 @@ namespace RestauranteAPI.Metodos
                     );
 
                     resultado.success = true;
-                    resultado.Mensaje = "Ingreso exitoso";
+                    resultado.Mensaje = "Contraseña válida";
                     resultado.id = _usuario.id;
                     resultado.Usuario = _usuario.usuario;
-                    //resultado.email= _usuario.email;
+                    resultado.rol= _usuario.rol;
                     resultado._token = new JwtSecurityTokenHandler().WriteToken(token);
                 }
                 else
@@ -150,6 +150,14 @@ namespace RestauranteAPI.Metodos
             }
 
             return resultado;
+        }
+
+        public async Task<UsuarioModel> Login(string user, string password)
+        {
+            var _usuarios = await EjecutarSP(2, null, user);
+
+            var _usuario = _usuarios[0];
+
         }
     }
 }
