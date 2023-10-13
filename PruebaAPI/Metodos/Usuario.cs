@@ -1,26 +1,12 @@
-﻿using System.Data.SqlClient;
-using BCrypt.Net;
-using RestauranteAPI.Models;
+﻿using Microsoft.Extensions.Configuration;
 using RestauranteAPI.Conn;
-using Microsoft.AspNetCore.Mvc;
+using RestauranteAPI.Models;
+using System.Data.SqlClient;
 using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
 
-public class Metodo_Usuario
+public class Metodo_Usuario2
 {
     private ConexionDB conexion = new ConexionDB();
-
-    public IConfiguration _configuration;
-
-    public Metodo_Usuario(IConfiguration configuration)
-    {
-        _configuration = configuration;
-    }
-
-    public Metodo_Usuario()
-    {
-
-    }
 
     private void AgregarParametro(SqlCommand cmd, string nombre, object valor)
     {
@@ -34,8 +20,8 @@ public class Metodo_Usuario
         }
     }
 
-    private async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, string? rol,
-        string? estatus, string? usuarioCreacion, string? password)
+    public async Task<List<UsuarioModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? usuario, string? rol,
+        string? estatus, string? usuario_creacion, string? password, string? temp)
     {
         var lista = new List<UsuarioModel>();
 
@@ -52,8 +38,9 @@ public class Metodo_Usuario
             AgregarParametro(cmd, "@usuario", usuario);
             AgregarParametro(cmd, "@rol", rol);
             AgregarParametro(cmd, "@estatus", estatus);
-            AgregarParametro(cmd, "@usuario_creacion", usuarioCreacion);
+            AgregarParametro(cmd, "@usuario_creacion", usuario_creacion);
             AgregarParametro(cmd, "@password", password);
+            AgregarParametro(cmd, "@temp", temp);
 
             await sql.OpenAsync();
 
@@ -70,6 +57,8 @@ public class Metodo_Usuario
                         usuario = (string)leer["usuario"],
                         rol = (string)leer["rol"],
                         estatus = (string)leer["estatus"],
+                        token = (string)leer["token"],
+                        confirmado = (int)leer["confirmado"],
                         usuario_creacion = (string)leer["usuario_creacion"],
                         password = (string)leer["password"]
                     };
@@ -78,49 +67,38 @@ public class Metodo_Usuario
                 }
             }
         }
-
         return lista;
     }
 
     public async Task<List<UsuarioModel>> MostrarUsuario()
     {
-        return await EjecutarSP(4, null, null, null, null, null, null, null, null, null);
+        return await EjecutarSP(4, null, null, null, null, null, null, null, null, null, null);
     }
-    public async Task<List<UsuarioModel>> MostrarUsuario_id(int id)
+
+    public async Task<List<UsuarioModel>> MostrarUsuario_id(string usr)
     {
-        return await EjecutarSP(5, id, null, null, null, null, null, null, null, null);
+        return await EjecutarSP(5, null, null, null, null, usr, null, null, null, null, null);
     }
+
     public async Task InsertarUsuario(UsuarioModel parametros)
     {
         string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
 
-        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, null, 
-            parametros.usuario_creacion, hashPassword);
+        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, null,
+            parametros.usuario_creacion, hashPassword, null);
     }
+
     public async Task ModificarUsuario(UsuarioModel parametros)
     {
         string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
 
-        await EjecutarSP(2, parametros.id, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, parametros.estatus, parametros.usuario_creacion, hashPassword);
+        await EjecutarSP(2, null, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, parametros.estatus,
+            parametros.usuario_creacion, hashPassword, null);
     }
-    public async Task EliminarUsuario(UsuarioModel parametros)
+
+    public async Task EliminarUsuario(string usuario)
     {
-        await EjecutarSP(3, parametros.id, null, null, null, null, null, null, null, null);
-    }
-    public async Task<bool> ValidarUsuario(int? id, string? contraseñaUsuario)
-    {
-        var usuarios = await EjecutarSP(5, id, null, null, null, null, null, null, null, null);
-
-        if (usuarios.Count == 1)
-        {
-            var usuario = usuarios[0];
-
-            bool contraseñasCoinciden = BCrypt.Net.BCrypt.Verify(contraseñaUsuario, usuario.password);
-
-            return contraseñasCoinciden;
-        }
-
-        return false;
+        await EjecutarSP(3, null, null, null, null, usuario, null, null, null, null, null);
     }
 
     public class ValidacionResultado
@@ -133,9 +111,7 @@ public class Metodo_Usuario
     {
         var resultado = new ValidacionResultado();
 
-        //resultado.Usuario = usr;
-
-        var usuarios = await EjecutarSP(6, null, null, null, null, usr, null, null, null, null);
+        var usuarios = await EjecutarSP(6, null, null, null, null, usr, null, null, null, null, null);
 
         // Tomar el primer usuario de la lista (asumiendo que es el único)
         var usuario = usuarios[0];
@@ -164,17 +140,6 @@ public class Metodo_Usuario
                 resultado.Mensaje = "Contraseña no válida";
             }
         }
-
-        var jwt = _configuration.GetSection("Jwt").Get<JwtModel>();
-
-        var claims = new[]
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, jwt.Subject),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
-            //new Claim("id", usuario.id),
-            new Claim("usuario", usuario.usuario)
-        };
 
         return resultado;
     }
