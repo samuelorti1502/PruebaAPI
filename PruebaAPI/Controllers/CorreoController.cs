@@ -72,8 +72,48 @@ namespace RestauranteAPI.Controllers.Administracion
             }
         }
 
+        [HttpGet]
+        [Route("confirmar/{email}")]
+
+        public async Task<ActionResult<List<CorreoModel>>> Gett(string email)
+        {
+            try
+            {
+                var datos = new Metodo_Correo();
+                email = email.Replace("%40", "@");
+                var lista = await datos.MostrarUsuario_correo(email);
+
+                if (lista == null)
+                {
+                    return NotFound("No se encontró el Correo proporcionado.");
+                }
+
+                if (lista.Count > 0)
+                {
+                    const string caracteresPermitidos = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+                    Random random = new Random();
+                    StringBuilder token = new StringBuilder();
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        int indice = random.Next(caracteresPermitidos.Length);
+                        token.Append(caracteresPermitidos[indice]);
+                    }
+                    await datos.agregarTokenCuenta(email, token.ToString());
+                    await datos.EnviarCorreoConfirmacion(email, token.ToString());
+                }
+
+                return Ok(lista);
+
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
         [HttpPut]
-        [Route("confirmar")]
+        [Route("confirmar-password")]
         public async Task<ActionResult> Put(CorreoModel parametros)
         {
             try
@@ -102,6 +142,43 @@ namespace RestauranteAPI.Controllers.Administracion
                 }
                 //await datos.ConfirmarContraseña(parametros.correoUsuario, parametros.contraseña);
                 return StatusCode(StatusCodes.Status500InternalServerError, "Erro el token no es correcto: " );
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Route("confirmar-cuenta")]
+        public async Task<ActionResult> Putt(CorreoModel parametros)
+        {
+            try
+            {
+                var datos = new Metodo_Correo();
+                var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                var entrada = "";
+
+                foreach (var item in lista)
+                {
+                    entrada = item.token;
+                }
+                if (lista == null)
+                {
+                    return NotFound("No se encontró el correo proporcionado.");
+                }
+
+                if (lista.Count > 0)
+                {
+                    if (entrada == parametros.token)
+                    {
+                        await datos.ConfirmarCuenta(parametros.correoUsuario, parametros.token);
+                        return Ok("Cuenta confirmada con éxito!!");
+                    }
+
+                }
+                //await datos.ConfirmarContraseña(parametros.correoUsuario, parametros.contraseña);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error el token no es correcto: ");
             }
             catch (Exception ex)
             {

@@ -86,6 +86,16 @@ namespace RestauranteAPI.Metodos
             await EjecutarSP(6, null, correo, token, 1, hashPassword);
         }
 
+        public async Task ConfirmarCuenta(string correo, string token)
+        {
+            await EjecutarSP(7, null, correo, token, 1, null);
+        }
+
+        public async Task agregarTokenCuenta(string correo, string token)
+        {
+            await EjecutarSP(8, null, correo, token, 0, null);
+        }
+
         public async Task EnviarCorreo(string correo,string token)
         {
             try
@@ -122,6 +132,40 @@ namespace RestauranteAPI.Metodos
 
         }
 
-       
+        public async Task EnviarCorreoConfirmacion(string correo, string token)
+        {
+            try
+            {
+                var fromAddress = new MailAddress("pizzafresh35@gmail.com");
+
+                using (MailMessage mensaje = new MailMessage())
+                {
+                    mensaje.To.Add(correo);
+                    mensaje.Subject = "Confirmación de Cuenta";
+                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href=\"http://3.22.100.138/confirmar/{token}\">confirmar tu cuenta</a> </p> ";
+                    mensaje.IsBodyHtml = true;
+
+                    // Remitente
+                    mensaje.From = new MailAddress("pizzafresh35@gmail.com", "Confirma tu Cuenta");
+
+                    using (SmtpClient smtp = new SmtpClient())
+                    {
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = new NetworkCredential("pizzafresh35@gmail.com", "oeyv pnoy ratp hylc");
+                        smtp.Port = 587;
+                        smtp.Host = "smtp.gmail.com";
+                        smtp.EnableSsl = true;
+                        smtp.Send(mensaje);
+                    }
+                }
+
+                Console.WriteLine("Correo electrónico enviado con éxito a " + correo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al enviar el correo electrónico: " + ex.Message);
+            }
+
+        }
     }
 }
