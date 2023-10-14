@@ -75,20 +75,25 @@ namespace RestauranteAPI.Metodos
             return await EjecutarSP(5,null,correo,null,null,null);
         }
 
+        public async Task<List<CorreoModel>> MostrarUsuario_token(string token)
+        {
+            return await EjecutarSP(9, null, null,token, null, null);
+        }
+
         public async Task actualizarContraseña(string correo, string token)
         {
             await EjecutarSP(2, null, correo,token,0,null);
         }
 
-        public async Task ConfirmarContraseña(string correo, string contraseña,string token)
+        public async Task ConfirmarContraseña(string contraseña,string token)
         {
             string hashPassword = BCrypt.Net.BCrypt.HashPassword(contraseña);
-            await EjecutarSP(6, null, correo, token, 1, hashPassword);
+            await EjecutarSP(6, null,null, token, 1, hashPassword);
         }
 
-        public async Task ConfirmarCuenta(string correo, string token)
+        public async Task ConfirmarCuenta(string token)
         {
-            await EjecutarSP(7, null, correo, token, 1, null);
+            await EjecutarSP(7, null,null, token, 1, null);
         }
 
         public async Task agregarTokenCuenta(string correo, string token)

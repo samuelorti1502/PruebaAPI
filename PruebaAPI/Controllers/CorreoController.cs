@@ -119,7 +119,8 @@ namespace RestauranteAPI.Controllers.Administracion
             try
             {
                 var datos = new Metodo_Correo();
-                var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                //var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                var lista = await datos.MostrarUsuario_token(parametros.token);
                 var entrada = "";
 
                 foreach (var item in lista)
@@ -135,7 +136,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 {
                     if (entrada== parametros.token)
                     {
-                        await datos.ConfirmarContraseña(parametros.correoUsuario, parametros.contraseña, parametros.token);
+                        await datos.ConfirmarContraseña(parametros.contraseña, parametros.token);
                         return Ok("Contraseña actualizada con éxito!!");
                     }
                  
@@ -156,7 +157,8 @@ namespace RestauranteAPI.Controllers.Administracion
             try
             {
                 var datos = new Metodo_Correo();
-                var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                //var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                var lista = await datos.MostrarUsuario_token(parametros.token);
                 var entrada = "";
 
                 foreach (var item in lista)
@@ -172,7 +174,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 {
                     if (entrada == parametros.token)
                     {
-                        await datos.ConfirmarCuenta(parametros.correoUsuario, parametros.token);
+                        await datos.ConfirmarCuenta(parametros.token);
                         return Ok("Cuenta confirmada con éxito!!");
                     }
 
