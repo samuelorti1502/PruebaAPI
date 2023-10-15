@@ -116,7 +116,7 @@ namespace RestauranteAPI.Metodos
                     {
                         new Claim(JwtRegisteredClaimNames.Sub, jwt.Subject),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString()),
+                        new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.AddHours(-6).ToString()),
                         new Claim("id", _usuario.id.ToString()),
                         new Claim("usuario", _usuario.usuario),
                         new Claim(ClaimTypes.Role, _usuario.rol)
