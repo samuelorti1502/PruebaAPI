@@ -111,7 +111,7 @@ namespace RestauranteAPI.Metodos
                 {
                     mensaje.To.Add(correo);
                     mensaje.Subject = "Reincio de Contraseña";
-                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href=\"http://3.22.100.138/Olvide-Password/{token}\">Reiniciar Contraseña</a> </p> ";
+                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href=\"http://localhost:5173/auth/new-password/{token}\">Reiniciar Contraseña</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
