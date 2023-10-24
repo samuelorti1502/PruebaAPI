@@ -157,7 +157,7 @@ namespace RestauranteAPI.Controllers.Administracion
             try
             {
                 var datos = new Metodo_Correo();
-                //var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
+                
                 var lista = await datos.MostrarUsuario_token(parametros.token);
                 var entrada = "";
 
@@ -179,7 +179,7 @@ namespace RestauranteAPI.Controllers.Administracion
                     }
 
                 }
-                //await datos.ConfirmarContraseña(parametros.correoUsuario, parametros.contraseña);
+               
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error el token no es correcto: ");
             }
             catch (Exception ex)
