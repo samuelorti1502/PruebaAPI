@@ -82,12 +82,6 @@ namespace RestauranteAPI.Metodos
             return await EjecutarSP(9, null, null,token, null, null);
         }
 
-        public class ValidacionResultado
-        {
-            public bool? success { get; set; }
-            public string? Mensaje { get; set; }
-        }
-
         public async Task actualizarContraseña(string correo, string token)
         {
             await EjecutarSP(2, null, correo,token,0,null);
@@ -109,7 +103,6 @@ namespace RestauranteAPI.Metodos
             await EjecutarSP(8, null, correo, token, 0, null);
         }
 
-       
         public async Task EnviarCorreo(string correo,string token)
         {
             try

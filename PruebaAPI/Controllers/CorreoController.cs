@@ -7,21 +7,12 @@ namespace RestauranteAPI.Controllers.Administracion
 {
     [ApiController]
     [Route("api/correo")]
-
-
     public class CorreoController: ControllerBase
     {
-        public class ValidacionResultado
-        {
-            public bool? success { get; set; }
-            public string? Mensaje { get; set; }
-        }
-
         [HttpGet]
         [Route("listar")]
         public async Task<ActionResult<List<CorreoModel>>> Get()
         {
-
             try
             {
                 var datos = new Metodo_Correo();
@@ -125,11 +116,8 @@ namespace RestauranteAPI.Controllers.Administracion
         [Route("confirmar-password")]
         public async Task<ActionResult> Put(CorreoModel parametros)
         {
-            var respuesta = new ValidacionResultado();
-
             try
             {
-
                 var datos = new Metodo_Correo();
                 //var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
                 var lista = await datos.MostrarUsuario_token(parametros.token);
@@ -141,9 +129,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 }
                 if ((lista == null) || (lista.Count <= 0))
                 {
-                    //return NotFound("No se encontró el correo proporcionado.");
-                    respuesta.success= false;
-                    respuesta.Mensaje= "No se encontró el correo proporcionado.";
+                    return NotFound("No se encontró el correo proporcionado.");
                 }
                 
                 if (lista.Count > 0)
@@ -151,9 +137,7 @@ namespace RestauranteAPI.Controllers.Administracion
                     if (entrada== parametros.token)
                     {
                         await datos.ConfirmarContraseña(parametros.contraseña, parametros.token);
-                        respuesta.success= true;
-                        respuesta.Mensaje= "Contraseña actualizada con éxito!!";
-                       // return Ok("Contraseña actualizada con éxito!!");
+                        return Ok("Contraseña actualizada con éxito!!");
                     }
                  
                 }
@@ -164,7 +148,6 @@ namespace RestauranteAPI.Controllers.Administracion
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
-            return Ok(respuesta);
         }
 
         [HttpPost]
