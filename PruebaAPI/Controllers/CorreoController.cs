@@ -19,9 +19,9 @@ namespace RestauranteAPI.Controllers.Administracion
                 var lista = await datos.MostrarCorreo();
 
 
-                if (lista == null)
+                if ((lista == null) || (lista.Count <= 0))
                 {
-                    return BadRequest("No se encontró un rol con el ID proporcionado.");
+                    return BadRequest("No se encontró correo proporcionado.");
                 }
 
                 return Ok(lista);
@@ -43,9 +43,9 @@ namespace RestauranteAPI.Controllers.Administracion
                 email = email.Replace("%40", "@");
                 var lista = await datos.MostrarUsuario_correo(email);
 
-                if (lista == null)
+                if ((lista == null) || (lista.Count<=0))
                 {
-                    return BadRequest("No se encontró un rol con el ID proporcionado.");
+                    return BadRequest("No se encontró correo proporcionado.");
                 }
                 
                if(lista.Count >0)
@@ -83,7 +83,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 email = email.Replace("%40", "@");
                 var lista = await datos.MostrarUsuario_correo(email);
 
-                if (lista == null)
+                if ((lista == null) || (lista.Count <= 0))
                 {
                     return NotFound("No se encontró el Correo proporcionado.");
                 }
@@ -127,7 +127,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 {
                     entrada = item.token;
                 }
-                if (lista == null)
+                if ((lista == null) || (lista.Count <= 0))
                 {
                     return NotFound("No se encontró el correo proporcionado.");
                 }

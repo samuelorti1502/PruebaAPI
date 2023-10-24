@@ -65,6 +65,10 @@ namespace RestauranteAPI.Metodos
         {
             return await EjecutarSP(5, id, "", 0, 0);
         }
+        public async Task<List<CategoriasModel>> MostrarModulos_nombres(string nombre)
+        {
+            return await EjecutarSP(6, 0, nombre, 0, 0);
+        }
         public async Task InsertarModulos(CategoriasModel parametros)
         {
             await EjecutarSP(1, 0, parametros.nombre, parametros.id_status, parametros.usuario_creacion);

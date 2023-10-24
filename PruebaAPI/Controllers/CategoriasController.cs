@@ -52,6 +52,36 @@ namespace RestauranteAPI.Controllers
             }
 
         }
+        [HttpGet]
+        [Route("nombre/{nombre}")]
+
+        public async Task<ActionResult<List<CategoriasModel>>> MostrarModulos_nombre(string nombre)
+        {
+            try
+            {
+                if (nombre == null)
+                {
+                    return BadRequest("El nombre es necesario");
+                }
+
+                // Obtener el rol
+                var datos = new Metodo_Categorias();
+                var roles = await datos.MostrarModulos_nombres(nombre);
+
+                if (roles == null)
+                {
+                    return NotFound("No se encontró un rol con el nombre proporcionado.");
+                }
+
+                // Devolver la respuesta
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+
+        }
 
         [HttpPost]
         public async Task Post([FromBody] CategoriasModel parametros)
