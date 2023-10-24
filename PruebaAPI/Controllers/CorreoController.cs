@@ -21,7 +21,7 @@ namespace RestauranteAPI.Controllers.Administracion
 
                 if (lista == null)
                 {
-                    return NotFound("No se encontró un rol con el ID proporcionado.");
+                    return BadRequest("No se encontró un rol con el ID proporcionado.");
                 }
 
                 return Ok(lista);
@@ -45,7 +45,7 @@ namespace RestauranteAPI.Controllers.Administracion
 
                 if (lista == null)
                 {
-                    return NotFound("No se encontró un rol con el ID proporcionado.");
+                    return BadRequest("No se encontró un rol con el ID proporcionado.");
                 }
                 
                if(lista.Count >0)
