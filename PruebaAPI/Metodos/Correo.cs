@@ -111,7 +111,7 @@ namespace RestauranteAPI.Metodos
                 {
                     mensaje.To.Add(correo);
                     mensaje.Subject = "Reincio de Contraseña";
-                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href=\"http://localhost:5173/auth/new-password/{token}\">Reiniciar Contraseña</a> </p> ";
+                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href=\"http://localhost:5173/auth/forgot-password/{token}\">Reiniciar Contraseña</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
@@ -147,7 +147,7 @@ namespace RestauranteAPI.Metodos
                 {
                     mensaje.To.Add(correo);
                     mensaje.Subject = "Confirmación de Cuenta";
-                    mensaje.Body = $"<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href=\"http://localhost:5173/auth/new-password/{token}\">confirmar tu cuenta</a> </p> ";
+                    mensaje.Body = $"<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href=\"http://localhost:5173/auth/forgot-password/{token}\">confirmar tu cuenta</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
