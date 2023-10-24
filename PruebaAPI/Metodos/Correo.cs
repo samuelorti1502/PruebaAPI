@@ -5,12 +5,14 @@ using System.Text;
 using RestauranteAPI.Conn;
 using RestauranteAPI.Models;
 using System.Data.SqlClient;
+using Newtonsoft.Json.Linq;
 
 namespace RestauranteAPI.Metodos
 {
     public class Metodo_Correo
     {
         private ConexionDB conexion = new ConexionDB();
+        private string direccionToken = "http://localhost:5173/auth/forgot-password/";
 
         private void AgregarParametro(SqlCommand cmd, string nombre, object valor)
         {
@@ -110,8 +112,9 @@ namespace RestauranteAPI.Metodos
                 using (MailMessage mensaje = new MailMessage())
                 {
                     mensaje.To.Add(correo);
+                    direccionToken += token;
                     mensaje.Subject = "Reincio de Contraseña";
-                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href=\"http://localhost:5173/auth/forgot-password/{token}\">Reiniciar Contraseña</a> </p> ";
+                    mensaje.Body = "<H1> Solicitaste un reincicio de Contraseña </H1> <P> Sigue el siguiente enlace <a href= "+direccionToken+">Reiniciar Contraseña</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
@@ -146,8 +149,9 @@ namespace RestauranteAPI.Metodos
                 using (MailMessage mensaje = new MailMessage())
                 {
                     mensaje.To.Add(correo);
+                    direccionToken += token; 
                     mensaje.Subject = "Confirmación de Cuenta";
-                    mensaje.Body = $"<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href=\"http://localhost:5173/auth/forgot-password/{token}\">confirmar tu cuenta</a> </p> ";
+                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href= "+direccionToken+">confirmar tu cuenta</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente

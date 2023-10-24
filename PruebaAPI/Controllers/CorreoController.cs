@@ -112,7 +112,7 @@ namespace RestauranteAPI.Controllers.Administracion
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("confirmar-password")]
         public async Task<ActionResult> Put(CorreoModel parametros)
         {
@@ -150,7 +150,7 @@ namespace RestauranteAPI.Controllers.Administracion
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("confirmar-cuenta")]
         public async Task<ActionResult> Putt(CorreoModel parametros)
         {
