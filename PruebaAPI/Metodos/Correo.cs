@@ -159,7 +159,7 @@ namespace RestauranteAPI.Metodos
                     mensaje.To.Add(correo);
                     direccionTokenConfirmacion += token; 
                     mensaje.Subject = "Confirmación de Cuenta";
-                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href= "+direccionToken+">confirmar tu cuenta</a> </p> ";
+                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href= "+ direccionTokenConfirmacion + ">confirmar tu cuenta</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
