@@ -53,6 +53,36 @@ namespace RestauranteAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("nombre/{nombre}")]
+        public async Task<ActionResult<List<MenuModel>>> MostrarModulos_Nombre(string nombre)
+        {
+            try
+            {
+                if (nombre == null)
+                {
+                    return BadRequest("El nombre es necesario.");
+                }
+
+                // Obtener el rol
+                var datos = new Metodo_Menu();
+                var roles = await datos.MostrarModulos_nombre(nombre);
+
+                if (roles == null)
+                {
+                    return NotFound("No se encontraron productos con ese nombre.");
+                }
+
+                // Devolver la respuesta
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] MenuModel parametros)
         {

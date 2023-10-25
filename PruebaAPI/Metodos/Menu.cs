@@ -50,10 +50,10 @@ namespace RestauranteAPI.Metodos
                         var M_Menu = new MenuModel
                         {
                             id_prod_menu = (int)leer["id_prod_menu"],
-                            producto = (string)leer["producto"],
+                            nombre = (string)leer["producto"],
                             descripcion = (string)leer["descripcion"],
                             id_menu = (int)leer["id_menu"],
-                            precio_venta = (decimal)leer["precio_venta"],
+                            precio = (decimal)leer["precio_venta"],
                             id_estatus = (int)leer["id_estatus"],
                             usuario_creacion = (int)leer["usuario_creacion"],
                             imagen = (string)leer["imagen"]
@@ -75,13 +75,18 @@ namespace RestauranteAPI.Metodos
         {
             return await EjecutarSP(5, id, null, null, null, null, null, null, null);
         }
+
+        public async Task<List<MenuModel>> MostrarModulos_nombre(string nombre)
+        {
+            return await EjecutarSP(8, 0, nombre, null, null, 0, null, null, null);
+        }
         public async Task InsertarModulos(MenuModel parametros)
         {
-            await EjecutarSP(1, parametros.id_prod_menu, parametros.producto, parametros.descripcion, parametros.id_menu, parametros.precio_venta, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+            await EjecutarSP(1, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
         }
         public async Task ModificarModulos(MenuModel parametros)
         {
-            await EjecutarSP(2, parametros.id_prod_menu, parametros.producto, parametros.descripcion, parametros.id_menu, parametros.precio_venta, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+            await EjecutarSP(2, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
         }
 
         public async Task EliminarModulos(MenuModel parametros)
