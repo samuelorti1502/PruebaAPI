@@ -16,6 +16,30 @@ namespace RestauranteAPI.Controllers
             {
                 var datos = new Metodo_Menu();
                 var lista = await datos.MostrarModulos();
+
+                if(lista == null)
+                {
+                    return StatusCode(StatusCodes.Status204NoContent, "El servidor no tiene la información solicitada.");
+                }
+                else
+                {
+                    return Ok(lista);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public async Task<ActionResult<List<MenuModel>>> GetProductos()
+        {
+            try
+            {
+                var datos = new Metodo_Menu();
+                var lista = await datos.MostrarProductos();
                 return Ok(lista);
             }
             catch (Exception ex)

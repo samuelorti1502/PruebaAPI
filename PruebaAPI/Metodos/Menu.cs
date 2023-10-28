@@ -67,9 +67,58 @@ namespace RestauranteAPI.Metodos
             return lista;
         }
 
+        private async Task<List<ProductosModel>> EjecutarSP2(int accion, int? id_prod_menu, string? producto, string? descripcion, int? id_menu, decimal? precio_venta, int? id_estatus,
+                int? usuario_creacion, string? imagen)
+        {
+            var lista = new List<ProductosModel>();
+
+            using (var sql = new SqlConnection(conexion.GetConexion()))
+            using (var cmd = new SqlCommand("sp_CRUDProductoMenu", sql))
+            {
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+                AgregarParametro(cmd, "@operacion", accion);
+                AgregarParametro(cmd, "@id_prod_menu", id_prod_menu);
+                AgregarParametro(cmd, "@producto", producto);
+                AgregarParametro(cmd, "@descripcion", descripcion);
+                AgregarParametro(cmd, "@id_menu", id_menu);
+                AgregarParametro(cmd, "@precio_venta", precio_venta);
+                AgregarParametro(cmd, "@id_estatus", id_estatus);
+                AgregarParametro(cmd, "@usuario_creacion", usuario_creacion);
+                AgregarParametro(cmd, "@imagen", imagen);
+
+                await sql.OpenAsync();
+
+                using (var leer = await cmd.ExecuteReaderAsync())
+                {
+                    while (await leer.ReadAsync())
+                    {
+                        var M_Menu = new ProductosModel
+                        {
+                            id_prod_menu = (int)leer["id_prod_menu"],
+                            categoria = (string)leer["categoria"],
+                            nombre = (string)leer["producto"],
+                            descripcion = (string)leer["descripcion"],
+                            precio = (decimal)leer["precio"],
+                            estatus = (string)leer["estatus"],
+                            imagen = (string)leer["imagen"]
+                        };
+
+                        lista.Add(M_Menu);
+                    }
+                }
+            }
+
+            return lista;
+        }
+
         public async Task<List<MenuModel>> MostrarModulos()
         {
             return await EjecutarSP(4, null, null, null, null, null, null, null, null);
+        }
+        public async Task<List<ProductosModel>> MostrarProductos()
+        {
+            return await EjecutarSP2(6, null, null, null, null, null, null, null, null);
         }
         public async Task<List<MenuModel>> MostrarModulos_id(int id)
         {
