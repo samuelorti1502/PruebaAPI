@@ -16,6 +16,30 @@ namespace RestauranteAPI.Controllers
             {
                 var datos = new Metodo_Menu();
                 var lista = await datos.MostrarModulos();
+
+                if(lista == null)
+                {
+                    return StatusCode(StatusCodes.Status204NoContent, "El servidor no tiene la información solicitada.");
+                }
+                else
+                {
+                    return Ok(lista);
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("all")]
+        public async Task<ActionResult<List<MenuModel>>> GetProductos()
+        {
+            try
+            {
+                var datos = new Metodo_Menu();
+                var lista = await datos.MostrarProductos();
                 return Ok(lista);
             }
             catch (Exception ex)
@@ -41,6 +65,36 @@ namespace RestauranteAPI.Controllers
                 if (roles == null)
                 {
                     return NotFound("No se encontró un rol con el ID proporcionado.");
+                }
+
+                // Devolver la respuesta
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+
+        }
+
+        [HttpGet]
+        [Route("nombre/{nombre}")]
+        public async Task<ActionResult<List<MenuModel>>> MostrarModulos_Nombre(string nombre)
+        {
+            try
+            {
+                if (nombre == null)
+                {
+                    return BadRequest("El nombre es necesario.");
+                }
+
+                // Obtener el rol
+                var datos = new Metodo_Menu();
+                var roles = await datos.MostrarModulos_nombre(nombre);
+
+                if (roles == null)
+                {
+                    return NotFound("No se encontraron productos con ese nombre.");
                 }
 
                 // Devolver la respuesta

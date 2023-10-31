@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RestauranteAPI.Metodos;
 using RestauranteAPI.Models;
 using System.Text;
@@ -9,6 +9,7 @@ namespace RestauranteAPI.Controllers.Administracion
     [Route("api/correo")]
     public class CorreoController: ControllerBase
     {
+     
         [HttpGet]
         [Route("listar")]
         public async Task<ActionResult<List<CorreoModel>>> Get()
@@ -116,6 +117,7 @@ namespace RestauranteAPI.Controllers.Administracion
         [Route("confirmar-password")]
         public async Task<ActionResult> Put(CorreoModel parametros)
         {
+
             try
             {
                 var datos = new Metodo_Correo();
@@ -130,6 +132,7 @@ namespace RestauranteAPI.Controllers.Administracion
                 if ((lista == null) || (lista.Count <= 0))
                 {
                     return NotFound("No se encontró el correo proporcionado.");
+                    
                 }
                 
                 if (lista.Count > 0)
@@ -137,7 +140,7 @@ namespace RestauranteAPI.Controllers.Administracion
                     if (entrada== parametros.token)
                     {
                         await datos.ConfirmarContraseña(parametros.contraseña, parametros.token);
-                        return Ok("Contraseña actualizada con éxito!!");
+                       return Ok("Contraseña actualizada con éxito!!");
                     }
                  
                 }

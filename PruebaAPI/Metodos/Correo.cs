@@ -13,6 +13,7 @@ namespace RestauranteAPI.Metodos
     {
         private ConexionDB conexion = new ConexionDB();
         private string direccionToken = "http://localhost:5173/auth/forgot-password/";
+        private string direccionTokenConfirmacion = "http://localhost:5173/auth/";
 
         private void AgregarParametro(SqlCommand cmd, string nombre, object valor)
         {
@@ -149,9 +150,9 @@ namespace RestauranteAPI.Metodos
                 using (MailMessage mensaje = new MailMessage())
                 {
                     mensaje.To.Add(correo);
-                    direccionToken += token; 
+                    direccionTokenConfirmacion += token; 
                     mensaje.Subject = "Confirmación de Cuenta";
-                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href= "+direccionToken+">confirmar tu cuenta</a> </p> ";
+                    mensaje.Body = "<H1> Hola, gracias por registrarte con nosotros </H1> <P> Sigue el siguiente enlace para <a href= "+ direccionTokenConfirmacion + ">confirmar tu cuenta</a> </p> ";
                     mensaje.IsBodyHtml = true;
 
                     // Remitente
