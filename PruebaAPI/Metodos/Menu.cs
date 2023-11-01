@@ -124,6 +124,10 @@ namespace RestauranteAPI.Metodos
         {
             return await EjecutarSP(5, id, null, null, null, null, null, null, null);
         }
+        public async Task<List<MenuModel>> MostrarUltimoIngresado(string nombre)
+        {
+            return await EjecutarSP(9,0,nombre, null, null, null, null, null, null);
+        }
 
         public async Task<List<MenuModel>> MostrarModulos_nombre(string nombre)
         {
@@ -162,6 +166,11 @@ namespace RestauranteAPI.Metodos
         public async Task ModificarModulos(MenuModel parametros)
         {
             await EjecutarSP(2, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+        }
+
+        public async Task ModificarRutaImagen(string ruta, int id)
+        {
+            await EjecutarSP(10,id, null, null, null, null, null, null,ruta);
         }
 
         public async Task EliminarModulos(MenuModel parametros)

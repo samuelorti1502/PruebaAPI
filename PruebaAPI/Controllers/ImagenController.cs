@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using RestauranteAPI.Conn;
 using RestauranteAPI.Helpers;
+using RestauranteAPI.Metodos;
 using RestauranteAPI.Models;
 using System.Data;
 using System.Data.SqlClient;
@@ -217,64 +218,90 @@ namespace RestauranteAPI.Controllers
 
         [HttpPost]
         [Route("guardar-imagen")]
-        public IActionResult SubirImagen([FromForm] ImagenModel archivo)
+        public async Task<IActionResult> SubirImagenAsync([FromForm] ImagenModel archivo)
         {
-            if (archivo == null || archivo.nombre == null)
+            try
             {
-                return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
-            }
+                
+                var datos = new Metodo_Menu();
+                var lista = await datos.MostrarUltimoIngresado(archivo.ingreso);
 
-            var file = archivo.nombre;
-
-            if (file != null && file.Length > 0)
-            {
-                try
+                if (lista == null)
                 {
-                    var tipo = Path.GetExtension(file.FileName).ToLower();
-                    var tiposValidos = new[] { ".png", ".jpg", ".jpeg", ".svg" };
-                    long maxFileSizeInBytes = 10 * 1024 * 1024;
+                    return StatusCode(StatusCodes.Status204NoContent, "El servidor no tiene la información solicitada.");
+                }
+                else
+                {
 
-                    if (file.Length >= 0 && file.Length <= maxFileSizeInBytes)
+                    if (archivo == null || archivo.nombre == null)
                     {
-                        if (tiposValidos.Contains(tipo))
+                        return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+                    }
+
+                    var file = archivo.nombre;
+
+                    if (file != null && file.Length > 0)
+                    {
+                        try
                         {
-                            var fechaActual = DateTime.Now.ToString("yyyyMMddHH");
-                            string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
-                            var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
+                            var tipo = Path.GetExtension(file.FileName).ToLower();
+                            var tiposValidos = new[] { ".png", ".jpg", ".jpeg", ".svg" };
+                            long maxFileSizeInBytes = 10 * 1024 * 1024;
 
-                            try
+                            if (file.Length >= 0 && file.Length <= maxFileSizeInBytes)
                             {
-                                var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
-
-                                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                                if (tiposValidos.Contains(tipo))
                                 {
-                                    file.CopyTo(stream);
-                                }
+                                    var fechaActual = DateTime.Now.ToString("yyyyMMddHH");
+                                    string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
+                                    var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
 
-                                return Ok("Imagen cargada con éxito!!");
+                                    try
+                                    {
+                                        var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
+
+                                        using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                                        {
+                                            file.CopyTo(stream);
+                                        }
+                                        var funcion = new Metodo_Menu();
+                                        
+                                        await funcion.ModificarRutaImagen(fileNameComplete, lista[1].id_prod_menu);
+
+                                        return Ok("Imagen cargada con éxito en: "+fileNameComplete+" id producto: "+ lista[1].id_prod_menu);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                                    }
+                                }
+                                else
+                                {
+                                    return BadRequest("El archivo no es una imagen válida");
+                                }
                             }
-                            catch (Exception ex)
+                            else
                             {
-                                return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                                return BadRequest("El archivo excede el tamaño máximo permitido");
                             }
+
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            return BadRequest("El archivo no es una imagen válida");
+                            return StatusCode(500, "Error: " + ex.Message);
                         }
                     }
-                    else { 
-                        return BadRequest("El archivo excede el tamaño máximo permitido");
-                    }
-                    
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, "Error: " + ex.Message);
+
+                    return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
                 }
             }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
 
-            return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+
+            
         }
 
 
