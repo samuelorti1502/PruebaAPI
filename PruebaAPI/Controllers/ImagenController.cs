@@ -205,5 +205,35 @@ namespace RestauranteAPI.Controllers
 
             return resultado;
         }
+
+        
+
+       
+
+        private const string RutaBase = "/usr/share/nginx/html/media/menu/";
+
+        [HttpPost]
+        [Route("guardar-imagen")]
+        public IActionResult SubirImagen(IFormFile archivo)
+        {
+            if (archivo != null && archivo.Length > 0)
+            {
+                // Aquí puedes manejar el archivo, guardar en el servidor, etc.
+                // Ejemplo: Guardar archivo con un nombre específico
+                var rutaCompleta = Path.Combine(RutaBase, archivo.FileName);
+
+                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                {
+                    archivo.CopyTo(stream);
+                }
+
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+            }
+        }
+
     }
 }
