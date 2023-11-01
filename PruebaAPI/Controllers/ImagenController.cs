@@ -226,6 +226,10 @@ namespace RestauranteAPI.Controllers
                 string[] parts = file.FileName.Split('.');
                 string nameFile = parts[0];
                 var fileNameComplete = Path.Combine(RutaBase, nameFile + "_" + fechaActual + tipo);
+                if (archivo == null || archivo.nombre == null)
+                {
+                    return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+                }
 
                 if (archivo != null && file.Length > 0)
                 {
