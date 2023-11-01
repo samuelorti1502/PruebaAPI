@@ -265,10 +265,10 @@ namespace RestauranteAPI.Controllers
                                             file.CopyTo(stream);
                                         }
                                         var funcion = new Metodo_Menu();
-                                        
-                                        await funcion.ModificarRutaImagen(fileNameComplete, lista[1].id_prod_menu);
+                                        int idMenu = lista[1].id_prod_menu;
+                                        await funcion.ModificarRutaImagen(fileNameComplete, idMenu);
 
-                                        return Ok("Imagen cargada con éxito en: "+fileNameComplete+" id producto: "+ lista[1].id_prod_menu);
+                                        return Ok("Imagen cargada con éxito en: "+fileNameComplete+" id producto: "+ idMenu;
                                     }
                                     catch (Exception ex)
                                     {
