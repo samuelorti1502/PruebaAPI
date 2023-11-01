@@ -214,17 +214,16 @@ namespace RestauranteAPI.Controllers
 
         [HttpPost]
         [Route("guardar-imagen")]
-        public IActionResult SubirImagen(IFormFile archivo)
+        public IActionResult SubirImagen([FromForm] ImagenModel archivo)
         {
-            if (archivo != null && archivo.Length > 0)
+            var file = archivo.nombre;
+            if (archivo != null && file.Length > 0)
             {
-                // Aquí puedes manejar el archivo, guardar en el servidor, etc.
-                // Ejemplo: Guardar archivo con un nombre específico
-                var rutaCompleta = Path.Combine(RutaBase, archivo.FileName);
+                var rutaCompleta = Path.Combine(RutaBase, file.Name);
 
                 using (var stream = new FileStream(rutaCompleta, FileMode.Create))
                 {
-                    archivo.CopyTo(stream);
+                    file.CopyTo(stream);
                 }
 
                 return Ok();
