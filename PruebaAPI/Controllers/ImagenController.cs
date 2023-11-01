@@ -268,7 +268,7 @@ namespace RestauranteAPI.Controllers
                                         int idMenu = lista[1].id_prod_menu;
                                         await funcion.ModificarRutaImagen(fileNameComplete, idMenu);
 
-                                        return Ok("Imagen cargada con éxito en: "+fileNameComplete+" id producto: "+ idMenu;
+                                        return Ok("Imagen cargada con éxito en: "+fileNameComplete+" id producto: "+ idMenu);
                                     }
                                     catch (Exception ex)
                                     {
