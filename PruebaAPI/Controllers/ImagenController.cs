@@ -210,7 +210,7 @@ namespace RestauranteAPI.Controllers
 
        
 
-        private const string RutaBase = "/usr/share/nginx/html/media/menu/";
+        private const string RutaBase = "/home/ubuntu/files/";
 
         [HttpPost]
         [Route("guardar-imagen")]
