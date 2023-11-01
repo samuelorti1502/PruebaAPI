@@ -232,33 +232,41 @@ namespace RestauranteAPI.Controllers
                 {
                     var tipo = Path.GetExtension(file.FileName).ToLower();
                     var tiposValidos = new[] { ".png", ".jpg", ".jpeg", ".svg" };
+                    long maxFileSizeInBytes = 15 * 1024 * 1024;
 
-                    if (tiposValidos.Contains(tipo))
+                    if (file.Length >= 0 && file.Length <= maxFileSizeInBytes)
                     {
-                        var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
-                        string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
-                        var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
-
-                        try
+                        if (tiposValidos.Contains(tipo))
                         {
-                            var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
+                            var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
+                            string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
+                            var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
 
-                            using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                            try
                             {
-                                file.CopyTo(stream);
-                            }
+                                var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
 
-                            return Ok("Imagen cargada con éxito!!");
+                                using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                                {
+                                    file.CopyTo(stream);
+                                }
+
+                                return Ok("Imagen cargada con éxito!!");
+                            }
+                            catch (Exception ex)
+                            {
+                                return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                            }
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                            return BadRequest("El archivo no es una imagen válida");
                         }
                     }
-                    else
-                    {
-                        return BadRequest("El archivo no es una imagen válida");
+                    else { 
+                        return BadRequest("El archivo excede el tamaño máximo permitido");
                     }
+                    
                 }
                 catch (Exception ex)
                 {
