@@ -218,55 +218,56 @@ namespace RestauranteAPI.Controllers
         [Route("guardar-imagen")]
         public IActionResult SubirImagen([FromForm] ImagenModel archivo)
         {
-            try
+            if (archivo == null || archivo.nombre == null)
             {
-                var file = archivo.nombre;
-                var tipo = Path.GetExtension(file.FileName);
-                var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
-                string[] parts = file.FileName.Split('.');
-                string nameFile = parts[0];
-                var fileNameComplete = Path.Combine(RutaBase, nameFile + "_" + fechaActual + tipo);
-                if (archivo == null || archivo.nombre == null)
-                {
-                    return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
-                }
+                return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+            }
 
-                if (archivo != null && file.Length > 0)
+            var file = archivo.nombre;
+
+            if (file != null && file.Length > 0)
+            {
+                try
                 {
-                    if (tipo.Contains(".png") || tipo.Contains(".jpg") || tipo.Contains(".jpeg") || tipo.Contains(".svg"))
+                    var tipo = Path.GetExtension(file.FileName).ToLower();
+                    var tiposValidos = new[] { ".png", ".jpg", ".jpeg", ".svg" };
+
+                    if (tiposValidos.Contains(tipo))
                     {
-                        using (var stream = new FileStream(fileNameComplete, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
+                        var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
+                        string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
+                        var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
 
-                        return Ok("Imagen cargada con éxito!!");
+                        try
+                        {
+                            var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
+
+                            using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+
+                            return Ok("Imagen cargada con éxito!!");
+                        }
+                        catch (Exception ex)
+                        {
+                            return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                        }
                     }
                     else
                     {
-                        return BadRequest("El archivo no es una imagen");
-                    }
-
-                    if (fileNameComplete != null)
-                    {
-                        var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
-                        using (var stream = new FileStream(rutaCompleta, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
-                        return Ok();
+                        return BadRequest("El archivo no es una imagen válida");
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
+                    return StatusCode(500, "Error: " + ex.Message);
                 }
             }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
-            }
+
+            return BadRequest("No se ha enviado ningún archivo o el archivo es inválido.");
         }
+
 
     }
 
