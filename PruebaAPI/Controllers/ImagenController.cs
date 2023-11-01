@@ -232,7 +232,7 @@ namespace RestauranteAPI.Controllers
                 {
                     var tipo = Path.GetExtension(file.FileName).ToLower();
                     var tiposValidos = new[] { ".png", ".jpg", ".jpeg", ".svg" };
-                    long maxFileSizeInBytes = 15 * 1024 * 1024;
+                    long maxFileSizeInBytes = 10 * 1024 * 1024;
 
                     if (file.Length >= 0 && file.Length <= maxFileSizeInBytes)
                     {
