@@ -210,6 +210,7 @@ namespace RestauranteAPI.Controllers
 
        
 
+        //private const string RutaBase = "C:\\files";
         private const string RutaBase = "/home/ubuntu/files/";
 
         [HttpPost]
@@ -217,9 +218,28 @@ namespace RestauranteAPI.Controllers
         public IActionResult SubirImagen([FromForm] ImagenModel archivo)
         {
             var file = archivo.nombre;
+            var tipo = Path.GetExtension(file.FileName);
+            var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
+            string[] parts = file.FileName.Split('.');
+            string nameFile = parts[0];
+            var fileNameComplete = Path.Combine(RutaBase, nameFile + "_" + fechaActual +tipo);
+
             if (archivo != null && file.Length > 0)
             {
-                var rutaCompleta = Path.Combine(RutaBase, file.Name);
+                if(tipo.Contains(".png") || tipo.Contains(".jpg") || tipo.Contains(".jpeg") || tipo.Contains(".svg"))
+                {
+                    using (var stream = new FileStream(fileNameComplete, FileMode.Create))
+                    {
+                        file.CopyTo(stream);
+                    }
+
+                    return Ok("Imagen cargada con éxito!!");
+                }
+                else
+                {
+                    return BadRequest("El archivo no es una imagen");
+                }
+                var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
 
                 using (var stream = new FileStream(rutaCompleta, FileMode.Create))
                 {
