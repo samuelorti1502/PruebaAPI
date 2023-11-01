@@ -9,5 +9,6 @@
         public decimal? precio { get; set; }
         public string? estatus { get; set; }
         public string? imagen { get; set; }
+        public string? usuario_creacion { get; set; }
     }
 }
