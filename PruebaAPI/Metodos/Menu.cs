@@ -1,4 +1,4 @@
-﻿using RestauranteAPI.Conn;
+using RestauranteAPI.Conn;
 using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
@@ -67,8 +67,8 @@ namespace RestauranteAPI.Metodos
             return lista;
         }
 
-        private async Task<List<ProductosModel>> EjecutarSP2(int accion, int? id_prod_menu, string? producto, string? descripcion, int? id_menu, decimal? precio_venta, int? id_estatus,
-                int? usuario_creacion, string? imagen)
+        private async Task<List<ProductosModel>> EjecutarSP2(int accion, int? id_prod_menu, string? producto, string? descripcion, string? id_menu, decimal? precio_venta, string? id_estatus,
+                string? usuario_creacion, string? imagen)
         {
             var lista = new List<ProductosModel>();
 
