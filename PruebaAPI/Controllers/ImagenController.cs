@@ -252,7 +252,7 @@ namespace RestauranteAPI.Controllers
                             {
                                 if (tiposValidos.Contains(tipo))
                                 {
-                                    var fechaActual = DateTime.Now.ToString("yyyyMMddHH");
+                                    var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmssfff");
                                     string nameFile = Path.GetFileNameWithoutExtension(file.FileName);
                                     var fileNameComplete = Path.Combine(RutaBase, $"{nameFile}_{fechaActual}{tipo}");
 
