@@ -218,7 +218,8 @@ namespace RestauranteAPI.Controllers
         [Route("guardar-imagen")]
         public IActionResult SubirImagen([FromForm] ImagenModel archivo)
         {
-            try {
+            try
+            {
                 var file = archivo.nombre;
                 var tipo = Path.GetExtension(file.FileName);
                 var fechaActual = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -241,14 +242,16 @@ namespace RestauranteAPI.Controllers
                     {
                         return BadRequest("El archivo no es una imagen");
                     }
-                    var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
 
-                    using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                    if (fileNameComplete != null)
                     {
-                        file.CopyTo(stream);
+                        var rutaCompleta = Path.Combine(RutaBase, fileNameComplete);
+                        using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+                        return Ok();
                     }
-
-                    return Ok();
                 }
                 else
                 {
@@ -260,6 +263,8 @@ namespace RestauranteAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
         }
-        
+
     }
+
 }
+
