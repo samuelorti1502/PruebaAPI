@@ -132,7 +132,7 @@ namespace RestauranteAPI.Controllers
             try
             {
                 var funcion = new Metodo_Menu();
-                await funcion.NewProducto(parametros);
+               // await funcion.NewProducto(parametros);
                 var mensaje = "El producto del menu ha sido creado con éxito.";
 
                 return CreatedAtAction(nameof(Get), new { parametros.id_prod_menu }, new { Mensaje = mensaje });
