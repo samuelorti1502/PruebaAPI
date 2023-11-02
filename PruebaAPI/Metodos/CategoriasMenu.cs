@@ -85,7 +85,7 @@ namespace RestauranteAPI.Metodos
                 await EjecutarSP(1, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
 
                 resultado.success = true;
-                resultado.mensaje = "El producto del menú ha sido creado con éxito.";
+                resultado.mensaje = "El producto del menú ha sido actualizado con éxito.";
 
             }
             catch (Exception ex)
@@ -98,9 +98,24 @@ namespace RestauranteAPI.Metodos
             return resultado;
 
         }
-        public async Task ModificarModulos(CategoriasModel parametros)
+        public async Task<ValidacionResultado> ModificarModulos(CategoriasModel parametros)
         {
-            await EjecutarSP(2, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
+            var resultado = new ValidacionResultado();
+
+            try
+            {
+                await EjecutarSP(2, parametros.id_categoria, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
+                resultado.success = true;
+                resultado.mensaje = "El producto del menú ha sido modificado con éxito.";
+            }
+            catch (Exception ex )
+            {
+                resultado.success = false;
+                resultado.mensaje = "Ha ocurrido un error al intentar modificar el producto del menú: " + ex.Message;
+
+                throw;
+            }
+            return resultado;
         }
 
         public async Task EliminarModulos(CategoriasModel parametros)
