@@ -71,9 +71,32 @@ namespace RestauranteAPI.Metodos
         {
             return await EjecutarSP(6, null, nombre, null, null, null);
         }
-        public async Task InsertarModulos(CategoriasModel parametros)
+        public class ValidacionResultado
         {
-            await EjecutarSP(1, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
+            public bool? success { get; set; }
+            public string? mensaje { get; set; }
+        }
+        public async Task<ValidacionResultado> InsertarModulos(CategoriasModel parametros)
+        {
+            var resultado = new ValidacionResultado();
+
+            try
+            {
+                await EjecutarSP(1, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
+
+                resultado.success = true;
+                resultado.mensaje = "El producto del menú ha sido creado con éxito.";
+
+            }
+            catch (Exception ex)
+            {
+                resultado.success = false;
+                resultado.mensaje = "Ha ocurrido un error al intentar insertar el producto del menú: " + ex.Message;
+
+                throw;
+            }
+            return resultado;
+
         }
         public async Task ModificarModulos(CategoriasModel parametros)
         {
