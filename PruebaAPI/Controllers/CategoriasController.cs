@@ -104,8 +104,8 @@ namespace RestauranteAPI.Controllers
         {
             var funcion = new Metodo_Categorias();
             parametros.id_categoria = id;
-            await funcion.ModificarModulos(parametros);
-            return new OkResult();
+          var _respuseta =  await funcion.ModificarModulos(parametros);
+            return  Ok(_respuseta);
         }
 
         [HttpDelete("{id}")]
