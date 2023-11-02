@@ -88,12 +88,11 @@ public class Metodo_Usuario2
             parametros.usuario_creacion, hashPassword, null);
     }
 
-    public async Task ModificarUsuario(UsuarioModel parametros)
+    public async Task ModificarUsuario(UsuarioModel parametros,string temporal)
     {
         string hashPassword = BCrypt.Net.BCrypt.HashPassword(parametros.password);
 
-        await EjecutarSP(2, null, parametros.nombres, parametros.apellidos, parametros.email, parametros.usuario, parametros.rol, parametros.estatus,
-            parametros.usuario_creacion, hashPassword, null);
+        await EjecutarSP(2, 0,parametros.nombres ,parametros.apellidos ,parametros.email, parametros.usuario,parametros.rol, parametros.estatus,parametros.usuario_creacion,hashPassword, temporal);
     }
 
     public async Task EliminarUsuario(string usuario)
