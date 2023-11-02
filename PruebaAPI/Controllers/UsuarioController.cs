@@ -74,7 +74,8 @@ namespace RestauranteAPI.Controllers
             }
         }
 
-        [HttpPut("{user}")]
+        [HttpPut]
+        [Route("modificar/{user}")]
         public async Task<ActionResult> ModificarUsuario(string user,[FromBody] UsuarioModel parametros)
         {
             try
