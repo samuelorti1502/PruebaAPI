@@ -98,7 +98,8 @@ namespace RestauranteAPI.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("modificar/{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CategoriasModel parametros)
         {
             var funcion = new Metodo_Categorias();
