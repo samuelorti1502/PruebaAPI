@@ -85,7 +85,7 @@ namespace RestauranteAPI.Metodos
                 await EjecutarSP(1, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
 
                 resultado.success = true;
-                resultado.mensaje = "El producto del menú ha sido creado con éxito.";
+                resultado.mensaje = "El producto del menú ha sido actualizado con éxito.";
 
             }
             catch (Exception ex)

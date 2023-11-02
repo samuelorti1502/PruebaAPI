@@ -102,10 +102,19 @@ namespace RestauranteAPI.Controllers
         [Route("modificar/{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] CategoriasModel parametros)
         {
-            var funcion = new Metodo_Categorias();
-            parametros.id_categoria = id;
-          var _respuseta =  await funcion.ModificarModulos(parametros);
-            return  Ok(_respuseta);
+            try
+            {
+                var funcion = new Metodo_Categorias();
+                parametros.id_categoria = id;
+                var _respuseta = await funcion.ModificarModulos(parametros);
+                return Ok(_respuseta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+                throw;
+            }
+            
         }
 
         [HttpDelete("{id}")]
