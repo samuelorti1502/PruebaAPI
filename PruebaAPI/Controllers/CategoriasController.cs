@@ -84,16 +84,17 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpPost]
-        public async Task Post([FromBody] CategoriasModel parametros)
+        public async Task<IActionResult> Post([FromBody] CategoriasModel parametros)
         {
             try
             {
                 var funcion = new Metodo_Categorias();
-                await funcion.InsertarModulos(parametros);
+                var _respuesta = await funcion.InsertarModulos(parametros);
+                return Ok(_respuesta);
             }
             catch (Exception ex)
             {
-                StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
             }
         }
 

@@ -75,12 +75,13 @@ namespace RestauranteAPI.Controllers
         }
 
         [HttpPut("{user}")]
-        public async Task<ActionResult> ModificarUsuario([FromBody] UsuarioModel parametros)
+        public async Task<ActionResult> ModificarUsuario(string user,[FromBody] UsuarioModel parametros)
         {
             try
             {
                 var funcion = new Metodo_Usuario2();
-                await funcion.ModificarUsuario(parametros);
+                
+                await funcion.ModificarUsuario(parametros, user);
 
                 var mensaje = "El usuario " + parametros.usuario + " ha sido modificado con éxito.";
 

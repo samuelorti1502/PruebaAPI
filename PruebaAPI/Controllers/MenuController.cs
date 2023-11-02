@@ -113,7 +113,26 @@ namespace RestauranteAPI.Controllers
             try
             {
                 var funcion = new Metodo_Menu();
-                await funcion.InsertarModulos(parametros);
+                var _respuesta = await funcion.InsertarModulos(parametros);
+                //var mensaje = "El producto del menu ha sido creado con éxito.";
+
+                //return CreatedAtAction(nameof(Get), new { parametros.id_prod_menu }, new { Mensaje = mensaje });
+                return Ok(_respuesta);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Route("productos")]
+        public async Task<IActionResult> NewProducto([FromBody] ProductosModel parametros)
+        {
+            try
+            {
+                var funcion = new Metodo_Menu();
+               // await funcion.NewProducto(parametros);
                 var mensaje = "El producto del menu ha sido creado con éxito.";
 
                 return CreatedAtAction(nameof(Get), new { parametros.id_prod_menu }, new { Mensaje = mensaje });

@@ -1,4 +1,4 @@
-﻿using RestauranteAPI.Conn;
+using RestauranteAPI.Conn;
 using RestauranteAPI.Models;
 using System.Data.SqlClient;
 
@@ -67,8 +67,8 @@ namespace RestauranteAPI.Metodos
             return lista;
         }
 
-        private async Task<List<ProductosModel>> EjecutarSP2(int accion, int? id_prod_menu, string? producto, string? descripcion, int? id_menu, decimal? precio_venta, int? id_estatus,
-                int? usuario_creacion, string? imagen)
+        private async Task<List<ProductosModel>> EjecutarSP2(int accion, int? id_prod_menu, string? producto, string? descripcion, string? id_menu, decimal? precio_venta, string? id_estatus,
+                string? usuario_creacion, string? imagen)
         {
             var lista = new List<ProductosModel>();
 
@@ -124,18 +124,53 @@ namespace RestauranteAPI.Metodos
         {
             return await EjecutarSP(5, id, null, null, null, null, null, null, null);
         }
+        public async Task<List<MenuModel>> MostrarUltimoIngresado(string nombre)
+        {
+            return await EjecutarSP(9,0,nombre, null, null, null, null, null, null);
+        }
 
         public async Task<List<MenuModel>> MostrarModulos_nombre(string nombre)
         {
             return await EjecutarSP(8, 0, nombre, null, null, 0, null, null, null);
         }
-        public async Task InsertarModulos(MenuModel parametros)
+
+        public class ValidacionResultado
         {
-            await EjecutarSP(1, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+            public bool? success { get; set; }
+            public string? mensaje { get; set; }
         }
+
+        public async Task<ValidacionResultado> InsertarModulos(MenuModel parametros)
+        {
+            var resultado = new ValidacionResultado();
+
+            try
+            {
+                var _prod = await EjecutarSP(1, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+
+                //var _producto = _prod[0];
+
+                resultado.success = true;
+                resultado.mensaje = "El producto del menú ha sido creado con éxito.";
+            }
+            catch (Exception ex)
+            {
+                // Aquí capturas la excepción y devuelves un mensaje de error significativo
+                resultado.success = false;
+                resultado.mensaje = "Ha ocurrido un error al intentar insertar el producto del menú: " + ex.Message;
+            }
+
+            return resultado;
+        }
+
         public async Task ModificarModulos(MenuModel parametros)
         {
             await EjecutarSP(2, parametros.id_prod_menu, parametros.nombre, parametros.descripcion, parametros.id_menu, parametros.precio, parametros.id_estatus, parametros.usuario_creacion, parametros.imagen);
+        }
+
+        public async Task ModificarRutaImagen(string ruta, int id)
+        {
+            await EjecutarSP(10,id, null, null, null, null, null, null,ruta);
         }
 
         public async Task EliminarModulos(MenuModel parametros)
