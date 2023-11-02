@@ -20,7 +20,7 @@ namespace RestauranteAPI.Metodos
             }
         }
 
-        private async Task<List<CategoriasModel>> EjecutarSP(int accion, int? id, string? nombre, int? id_estatus, int? usuario_creacion)
+        private async Task<List<CategoriasModel>> EjecutarSP(int accion, int? id, string? nombre, string? imagen, int? id_estatus, string? usuario_creacion)
         {
             var lista = new List<CategoriasModel>();
 
@@ -32,6 +32,7 @@ namespace RestauranteAPI.Metodos
                 AgregarParametro(cmd, "@operacion", accion);
                 AgregarParametro(cmd, "@id_categoria", id);
                 AgregarParametro(cmd, "@nombre", nombre);
+                AgregarParametro(cmd, "@imagen", imagen);
                 AgregarParametro(cmd, "@id_estatus", id_estatus);
                 AgregarParametro(cmd, "@usuario_creacion", usuario_creacion);
 
@@ -45,8 +46,9 @@ namespace RestauranteAPI.Metodos
                         {
                             id_categoria = (int)leer["id_categoria"],
                             nombre = (string)leer["nombre"],
+                            imagen = (string)leer["imagen"],
                             id_status = (int)leer["id_estatus"],
-                            usuario_creacion = (int)leer["usuario_creacion"]
+                            usuario_creacion = (string)leer["usuario_creacion"]
                         };
 
                         lista.Add(M_Modulos);
@@ -59,28 +61,28 @@ namespace RestauranteAPI.Metodos
 
         public async Task<List<CategoriasModel>> MostrarModulos()
         {
-            return await EjecutarSP(4, 0, "", 0, 0);
+            return await EjecutarSP(4, null, null, null, null, null);
         }
         public async Task<List<CategoriasModel>> MostrarModulos_id(int id)
         {
-            return await EjecutarSP(5, id, "", 0, 0);
+            return await EjecutarSP(5, id, null, null, null, null);
         }
         public async Task<List<CategoriasModel>> MostrarModulos_nombres(string nombre)
         {
-            return await EjecutarSP(6, 0, nombre, 0, 0);
+            return await EjecutarSP(6, null, nombre, null, null, null);
         }
         public async Task InsertarModulos(CategoriasModel parametros)
         {
-            await EjecutarSP(1, 0, parametros.nombre, parametros.id_status, parametros.usuario_creacion);
+            await EjecutarSP(1, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
         }
         public async Task ModificarModulos(CategoriasModel parametros)
         {
-            await EjecutarSP(2, parametros.id_categoria, parametros.nombre, parametros.id_status, parametros.usuario_creacion);
+            await EjecutarSP(2, null, parametros.nombre, parametros.imagen, parametros.id_status, parametros.usuario_creacion);
         }
 
         public async Task EliminarModulos(CategoriasModel parametros)
         {
-            await EjecutarSP(3, parametros.id_categoria, "", 0, 0);
+            await EjecutarSP(3, parametros.id_categoria, null, null, null, null);
         }
     }
 }
