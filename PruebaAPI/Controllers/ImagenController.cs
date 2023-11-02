@@ -214,7 +214,6 @@ namespace RestauranteAPI.Controllers
 
         //private const string RutaBase = "C:\\files";
         private const string RutaBase = "/tmp/files/images/";
-       // private const string RutaBase = "/home/ubuntu/files/";
 
         [HttpPost]
         [Route("guardar-imagen")]
