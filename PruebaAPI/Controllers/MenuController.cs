@@ -147,11 +147,47 @@ namespace RestauranteAPI.Controllers
         [Route("modificar/{id}")]
         public async Task<ActionResult> Put(int id, [FromBody] MenuModel parametros)
         {
-            var funcion = new Metodo_Menu();
-            parametros.id_prod_menu = id;
-            await funcion.ModificarModulos(parametros);
-            return new OkResult();
+            try
+            {
+                var funcion = new Metodo_Menu();
+                parametros.id_prod_menu = id;
+                await funcion.ModificarModulos(parametros);
+                return new OkResult();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+                throw;
+            }
+            
         }
+
+        [HttpPut]
+        [Route("inactivar/{id}")]
+        public async Task<ActionResult> Inactivar(int id)
+        {
+            try
+            {
+                var funcion = new Metodo_Menu();
+                var productoExistente = await funcion.VerificarExistenciaProducto(id);
+
+                if (productoExistente)
+                {
+                    await funcion.InactivarProducto(id);
+                    return Ok("El producto ha sido inactivado exitosamente"); 
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, "El producto especificado no existe.");
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+        }
+
+
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id, [FromBody] MenuModel parametros)

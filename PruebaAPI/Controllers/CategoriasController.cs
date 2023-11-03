@@ -125,5 +125,31 @@ namespace RestauranteAPI.Controllers
             await funcion.EliminarModulos(parametros);
             return new OkResult();
         }
+
+        [HttpPut]
+        [Route("inactivar/{id}")]
+        public async Task<ActionResult> Inactivar(int id)
+        {
+            try
+            {
+                var funcion = new Metodo_Categorias();
+                var productoExistente = await funcion.VerificarExistenciaProducto(id);
+
+                if (productoExistente)
+                {
+                    await funcion.InactivarProducto(id);
+                    return Ok(new { success = true, mensaje = "La categoría ha sido inactivada exitosamente" });
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status400BadRequest, new { success = false, mensaje = "La categoría especificada no existe" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { success = false, mensaje = "Error interno del servidor: " + ex.Message });
+            }
+        }
+
     }
 }
