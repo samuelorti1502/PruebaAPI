@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using RestauranteAPI.Metodos;
 using RestauranteAPI.Models;
 using System.Text;
@@ -7,8 +7,6 @@ namespace RestauranteAPI.Controllers.Administracion
 {
     [ApiController]
     [Route("api/correo")]
-
-
     public class CorreoController: ControllerBase
     {
      
@@ -16,7 +14,6 @@ namespace RestauranteAPI.Controllers.Administracion
         [Route("listar")]
         public async Task<ActionResult<List<CorreoModel>>> Get()
         {
-
             try
             {
                 var datos = new Metodo_Correo();
@@ -123,7 +120,6 @@ namespace RestauranteAPI.Controllers.Administracion
 
             try
             {
-
                 var datos = new Metodo_Correo();
                 //var lista = await datos.MostrarUsuario_correo(parametros.correoUsuario);
                 var lista = await datos.MostrarUsuario_token(parametros.token);
