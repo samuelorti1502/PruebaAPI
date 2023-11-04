@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestauranteAPI.Controllers.Administracion;
 using RestauranteAPI.Models;
 
 namespace RestauranteAPI.Controllers
@@ -40,9 +41,9 @@ namespace RestauranteAPI.Controllers
                 var datos = new Metodo_Usuario2();
                 var roles = await datos.MostrarUsuario_id(usuario);
 
-                if (roles == null)
+                if (roles == null || roles.Count<=0)
                 {
-                    return NotFound("No se encontró un rol con el ID proporcionado.");
+                    return BadRequest("El usuario proporcionado no esta registrado.");
                 }
 
                 // Devolver la respuesta
@@ -61,9 +62,12 @@ namespace RestauranteAPI.Controllers
             try
             {
                 var funcion = new Metodo_Usuario2();
+                parametros.password = BCrypt.Net.BCrypt.HashPassword("$$**--");
                 await funcion.InsertarUsuario(parametros);
 
                 var mensaje = "El usuario ha sido creado con éxito, revisa tu correo para confirmar tu cuenta.";
+                var ConfirmarCuenta = new CorreoController();
+                await ConfirmarCuenta.Gett(parametros.email);
 
                 return CreatedAtAction(nameof(Get), new { parametros.id }, new { Mensaje = mensaje });
             }

@@ -19,7 +19,7 @@ public class Metodo_Personas
         }
     }
 
-    private async Task<List<PersonasModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? nit, int? id_tipo_persona, int? id_direccion, int? id_estatus, int? id_telefono, int? usuarioCreacion)
+    private async Task<List<PersonasModel>> EjecutarSP(int accion, int? id, string? nombres, string? apellidos, string? email, string? nit, int? id_tipo_persona, int? id_estatus, int? usuarioCreacion)
     {
         var lista = new List<PersonasModel>();
 
@@ -35,8 +35,8 @@ public class Metodo_Personas
             AgregarParametro(cmd, "@nit", nit);
             AgregarParametro(cmd, "@email", email);
             AgregarParametro(cmd, "@id_tipo_persona", id_tipo_persona);
-            AgregarParametro(cmd, "@id_direccion", id_direccion);
-            AgregarParametro(cmd, "@id_telefono", id_telefono);
+           // AgregarParametro(cmd, "@id_direccion", id_direccion);
+            //AgregarParametro(cmd, "@id_telefono", id_telefono);
             AgregarParametro(cmd, "@id_estatus", id_estatus);
             AgregarParametro(cmd, "@usuario_creacion", usuarioCreacion);
 
@@ -54,8 +54,8 @@ public class Metodo_Personas
                         nit = (string)leer["nit"],
                         email = (string)leer["email"],
                         id_tipo_persona = (int)leer["id_tipo_persona"],
-                        id_direccion = (int)leer["id_direccion"],
-                        id_telefono = (int)leer["id_telefono"],
+                       // id_direccion = (int)leer["id_direccion"],
+                       // id_telefono = (int)leer["id_telefono"],
                         id_estatus = (int)leer["id_estatus"],
                         usuario_creacion = (int)leer["usuario_creacion"],
                     };
@@ -70,23 +70,29 @@ public class Metodo_Personas
 
     public async Task<List<PersonasModel>> MostrarPersonas()
     {
-        return await EjecutarSP(4, 0, "", "", "", "", 0, 0, 0, 0, 0);
+        return await EjecutarSP(4, 0, "", "", "", "", 0, 0, 0);
     }
     public async Task<List<PersonasModel>> MostrarPersonas_id(int id)
     {
-        return await EjecutarSP(5, id, "", "", "", "", 0, 0, 0, 0, 0);
+        return await EjecutarSP(5, id, "", "", "", "", 0, 0, 0);
     }
+
+    public async Task<List<PersonasModel>> MostrarPersonas_nit(string nit)
+    {
+        return await EjecutarSP(6, null, "", "", "", nit, 0, 0, 0);
+    }
+
     public async Task InsertarPersonas(PersonasModel parametros)
     {
-        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.nit, parametros.email, parametros.id_tipo_persona, parametros.id_direccion, parametros.id_telefono, parametros.id_estatus, parametros.usuario_creacion);
+        await EjecutarSP(1, 0, parametros.nombres, parametros.apellidos, parametros.nit, parametros.email, parametros.id_tipo_persona, parametros.id_estatus, parametros.usuario_creacion);
     }
     public async Task ModificarPersonas(PersonasModel parametros)
     {
-        await EjecutarSP(1, parametros.id_persona, parametros.nombres, parametros.apellidos, parametros.nit, parametros.email, parametros.id_tipo_persona, parametros.id_direccion, parametros.id_telefono, parametros.id_estatus, parametros.usuario_creacion);
+        await EjecutarSP(1, parametros.id_persona, parametros.nombres, parametros.apellidos, parametros.nit, parametros.email, parametros.id_tipo_persona, parametros.id_estatus, parametros.usuario_creacion);
     }
 
     public async Task EliminarPersonas(PersonasModel parametros)
     {
-        await EjecutarSP(5, parametros.id_persona, "", "", "", "", 0, 0, 0, 0, 0);
+        await EjecutarSP(5, parametros.id_persona, "", "", "", "", 0, 0, 0);
     }
 }
