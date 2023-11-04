@@ -177,5 +177,26 @@ namespace RestauranteAPI.Metodos
         {
             await EjecutarSP(5, parametros.id_prod_menu, null, null, null, null, null, null, null);
         }
+
+        public async Task InactivarProducto(int id)
+        {
+            await EjecutarSP(11, id, null, null, null, null, null, null, null);
+        }
+
+        public async Task<bool> VerificarExistenciaProducto(int id)
+        {
+            var _existe = await EjecutarSP(5, id, null, null, null, null, null, null, null);
+
+            if(_existe.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+            
+        }
+
     }
 }

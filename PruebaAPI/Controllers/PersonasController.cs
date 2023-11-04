@@ -53,6 +53,50 @@ namespace RestauranteAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("nit/{nit}")]
+        public async Task<ActionResult<List<PersonasModel>>> MostrarPersonas_nit(string nit)
+        {
+            try
+            {
+                if (nit == null)
+                {
+                    return BadRequest("El NIT no puede ser nulo.");
+                }
+
+                // Obtener el rol
+                var datos = new Metodo_Personas();
+                var roles = await datos.MostrarPersonas_nit(nit);
+
+                if (roles == null)
+                {
+                    return NotFound("No se encontró un rol con el NIT proporcionado.");
+                }
+
+                if(roles.Count == 0)
+                {
+                    roles.Add(new PersonasModel
+                    {
+                        id_persona = 0,
+                        nombres = "C/F",
+                        apellidos = "Consumidor Final",
+                        nit = "C/F",
+                        email = "",
+                        id_tipo_persona = 0,
+                        id_estatus = 0,
+                        usuario_creacion = 0
+                    });
+                }
+                // Devolver la respuesta
+                return Ok(roles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error interno del servidor: " + ex.Message);
+            }
+
+        }
+
         [HttpPost]
         public async Task Post([FromBody] PersonasModel parametros)
         {

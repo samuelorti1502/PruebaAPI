@@ -8,8 +8,8 @@
         public string? @nit { get; set; }
         public string? @email { get; set; }
         public int? id_tipo_persona { get; set; }
-        public int? id_direccion { get; set; }
-        public int? id_telefono { get; set; }
+        //public int? id_direccion { get; set; }
+        //public int? id_telefono { get; set; }
         public int? id_estatus { get; set; }
         public int? usuario_creacion { get; set; }
     }
