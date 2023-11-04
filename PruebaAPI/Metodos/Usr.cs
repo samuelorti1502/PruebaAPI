@@ -152,5 +152,20 @@ namespace RestauranteAPI.Metodos
 
             return resultado;
         }
+
+        public async Task<bool> VerificarExistencia(string usuario)
+        {
+            var _existe = await EjecutarSP(2, null, usuario);
+
+            if (_existe.Count != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
     }
 }
