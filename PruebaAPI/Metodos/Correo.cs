@@ -13,7 +13,7 @@ namespace RestauranteAPI.Metodos
     {
         private ConexionDB conexion = new ConexionDB();
         private string direccionToken = "http://localhost:5173/auth/forgot-password/";
-        private string direccionTokenConfirmacion = "http://localhost:5173/auth/";
+        private string direccionTokenConfirmacion = "http://localhost:5173/auth/firts-password/";
 
         private void AgregarParametro(SqlCommand cmd, string nombre, object valor)
         {
